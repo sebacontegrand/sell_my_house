@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Form" ADD COLUMN     "id" SERIAL NOT NULL,
+ADD CONSTRAINT "Form_pkey" PRIMARY KEY ("id");

@@ -1,0 +1,246 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Prelisting {
+  id String @id @default(uuid())
+  form Form?  
+  title String
+  description String
+  complete Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields:[userId],references:[id])
+  userId String
+}
+model Form {
+  id String @id @default(uuid())
+  prelistingId String @unique
+  prelisting Prelisting @relation(fields:[prelistingId],references:[id])
+  date DateTime @default(now())
+  asesor String
+  proprietario String
+  email String @unique
+  celular BigInt
+  fechadenacimiento DateTime?
+  whysell String?
+  ocupacion Boolean?
+  selltobuy Boolean?
+  solvebeforesell solveEnum?
+  includedinsell includeEnum?
+  whenneedtomove DateTime?
+  whyneedtomove whyEnum?
+  neighbors String?
+  neighborhood String?
+  typeoperation typeEnum?
+  direccion String?
+  propertytype propEnum?
+  ambientes Int?
+  orientacion orientEnum?
+  impuestos Int?
+  expensas Int?
+  servicios String?
+  valoralquiler Int?
+  valorventa Int?
+  antiguedad Int?
+  estado estadoEnum?
+  heattype heatEnum?
+  plantas Int?
+  cocheras Int?
+  banos Int?
+  toilette Int?
+  dormitorio Int?
+  dormitorioserv Boolean?
+  amenities Boolean?
+  baulera Boolean?
+  cantascensores Int?
+  categoria catEnum?
+  mlivinga Int?
+  mlivingl Int?
+  mcomedora Int?
+  mcomedorl Int?
+  mcocinaa Int?
+  mcocinal Int?
+  mdorm1a Int?
+  mdorm1l Int?
+  mdorm2a Int?
+  mdorm2l Int?
+  mdorm3l Int?
+  mdorm4a Int?
+  mdorm4l Int?
+  mlava Int?
+  mlavl Int?
+  mhalla Int?
+  mhalll Int?
+  mbanosa Int?
+  mbanosl Int?
+  mcocha Int?
+  mcochl Int?
+  mpiletaa Int?
+  mpiletal Int?
+  escritura Boolean?
+  plano Boolean?
+  finalobra Boolean?
+  comentarios String?
+}
+enum catEnum{
+  Altonivel
+  excelente
+  muybueno
+  regular
+}
+enum heatEnum{
+  losaradiante
+  radiadores
+  splitfc
+  central
+  sin
+}
+enum estadoEnum{
+  bueno 
+  construccion
+  estrenar
+  excelente
+  muybueno
+  reciclado
+  refaccionar
+  regular
+  pozo
+  otro
+
+}
+enum orientEnum{
+  N
+  NO
+  O
+  SO
+  S
+  SE
+  E
+  NE
+}
+enum solveEnum{
+  hipoteca
+  inhibiciones
+  matrimonio
+  otros
+}
+enum includeEnum{
+  muebles
+  cortinas
+  aires
+  luces
+  otros
+}
+enum whyEnum{
+  divorcio
+  economico
+  mudanza
+  otros
+}
+enum typeEnum{
+  alquiler
+  venta
+  alquilertemporario
+  ventayalquiler
+  ventayalqtemp
+  otros
+}
+enum propEnum{
+  dpto
+  casa
+  galpon
+  local
+  negocio
+  ph
+  cochera
+  oficina
+  lote
+  edificio
+  quinta
+  campo
+  otro
+}
+model User {
+  id            String          @id @default(uuid())
+  name          String?
+  password String?
+  roles         String[] @default(["user"])
+  isActive      Boolean  @default(true)
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+  prelisting Prelisting[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+ 
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([userId, credentialID])
+}
