@@ -31,7 +31,7 @@ export async function GET(request: Request, { params }: Segments) {
     });
 
     console.log(`Form found: ${formById ? true : false}`);
-    console.log(formById); // Log the actual form object to see its structure
+    console.log(formById); 
 
     if (formById) {
       const serializedForm = JSON.parse(JSON.stringify(formById, (key, value) =>
