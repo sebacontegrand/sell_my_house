@@ -1,6 +1,6 @@
 import React from "react";
 import { FormGrid } from "../../../components/forms/FormGrid";
-
+import { SpinnerDotted } from "spinners-react";
 import prisma from "../../../lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
@@ -39,11 +39,25 @@ const Form = async () => {
   });
   const typedForms = forms.map((form) => ({
     ...form,
-    typeoperation: form.typeoperation as typeEnum, // Ensure typeoperation is cast to typeEnum
+    typeoperation: form.typeoperation as typeEnum,
   }));
   return (
     <div>
-      <FormGrid forms={typedForms} />
+      {forms ? (
+        <>
+          <h1 className="pb-4 text-2xl text-yellow-800 font-bold">
+            Prelisting en Gestión
+          </h1>
+          <FormGrid forms={typedForms} />
+        </>
+      ) : (
+        <SpinnerDotted
+          size={50}
+          thickness={100}
+          speed={100}
+          color="rgba(172, 125, 57, 1)"
+        />
+      )}
     </div>
   );
 };

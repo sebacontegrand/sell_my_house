@@ -15,7 +15,8 @@ datasource db {
 
 model Prelisting {
   id String @id @default(uuid())
-  form Form?  
+  form Form?
+  feedback FeedBack?  
   title String
   description String
   complete Boolean @default(false)
@@ -27,7 +28,7 @@ model Prelisting {
 model Form {
   id String @id @default(uuid())
   prelistingId String @unique
-  prelisting Prelisting @relation(fields:[prelistingId],references:[id])
+  prelisting Prelisting @relation(fields:[prelistingId],references:[id], onDelete: Cascade)
   date DateTime @default(now())
   asesor String
   proprietario String
@@ -171,6 +172,50 @@ enum propEnum{
   quinta
   campo
   otro
+}
+model FeedBack{
+  id String @id @default(uuid())
+  prelistingId String @unique
+  prelisting Prelisting @relation(fields:[prelistingId],references:[id], onDelete: Cascade)
+  asesorCaptador String
+  asesorVendedor String
+  date DateTime @default(now())
+  valoracion valoracionEnum?
+  feedUbicacion feedubicacionEnum?
+  feedInmueble feedInmuebleEnum?
+  feedEstado feedEstadoEnum?
+  masgusto String?
+  menosgusto String?
+  oferta Boolean
+}
+enum feedEstadoEnum{
+  Muy_bueno
+  Bueno
+  Regular
+  Malo
+  Muy_malo
+}
+enum feedInmuebleEnum{
+   Muy_bueno
+  Bueno
+  Regular
+  Malo
+  Muy_malo
+}
+enum feedubicacionEnum{
+  Muy_bueno
+  Bueno
+  Regular
+  Malo
+  Muy_malo
+}
+enum valoracionEnum{
+  Muy_bueno
+  Bueno
+  Regular
+  Malo
+  Muy_malo
+
 }
 model User {
   id            String          @id @default(uuid())

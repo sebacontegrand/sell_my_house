@@ -18,21 +18,21 @@ const menuItem = [
   {
     icon: <IoCalendarOutline />,
     title: "Dashboard",
-    path: "/",
+    path: "/dashboard",
   },
   {
     icon: <IoCheckboxOutline />,
-    title: "Propriedades",
+    title: "Propriedades en Gestión",
     path: "/dashboard/propriedad",
   },
   {
     icon: <IoHomeOutline />,
-    title: "Prelistings",
+    title: "Formularios Prelistings",
     path: "/dashboard/form",
   },
   {
     icon: <IoCloudCircleOutline />,
-    title: "feedback",
+    title: "feedback a Clientes",
     path: "/dashboard/feedback",
   },
   {
@@ -41,6 +41,7 @@ const menuItem = [
     path: "/dashboard/profile",
   },
 ];
+
 const Sidebar = async () => {
   const session = await auth();
   if (!session) {

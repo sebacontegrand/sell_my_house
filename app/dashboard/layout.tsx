@@ -1,5 +1,3 @@
-// Admin Dashboard https://tailwindcomponents.com/component/dashboard-12
-
 import Sidebar from "../../components/sidebar/Sidebar";
 
 import TopMenu from "@/components/topMenu/TopMenu";

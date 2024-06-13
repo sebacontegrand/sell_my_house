@@ -2,7 +2,7 @@
 
 import React from "react";
 import { createForm } from "../../helpers/forms";
-import { useRouter, redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";

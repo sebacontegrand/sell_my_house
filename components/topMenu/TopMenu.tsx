@@ -1,5 +1,7 @@
-import { cookies } from "next/headers";
+"use client";
 import Link from "next/link";
+import { useState } from "react";
+
 import {
   CiBellOn,
   CiChat1,
@@ -7,17 +9,13 @@ import {
   CiSearch,
   CiShoppingBasket,
 } from "react-icons/ci";
+import MobileSidebarModal from "../MobileSideBarModal/ClientComponent";
 
 const TopMenu = () => {
-  const cookieStore = cookies();
-  const cart = JSON.parse(cookieStore.get("cart")?.value ?? "{}");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const getTotalCount = () => {
-    let items = 0;
-    Object.values(cart).forEach((value) => {
-      items += value as number;
-    });
-    return items;
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
   return (
     <div className="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
@@ -25,9 +23,13 @@ const TopMenu = () => {
         <h5 hidden className="text-2xl text-gray-600 font-medium lg:block">
           Dashboard
         </h5>
-        <button className="w-12 h-16 -mr-2 border-r lg:hidden">
+        <button
+          onClick={toggleSidebar}
+          className="w-12 h-16 -mr-2 border-r lg:hidden"
+        >
           <CiMenuBurger size={30} />
         </button>
+        <MobileSidebarModal isOpen={isSidebarOpen} onClose={toggleSidebar} />
         <div className="flex space-x-2">
           <div hidden className="md:block">
             <div className="relative flex items-center text-gray-400 focus-within:text-cyan-400">
@@ -54,9 +56,6 @@ const TopMenu = () => {
             href={"/dashboard/cart"}
             className="p-2 flex items-center justify-center h-10 rounded-xl border bg-gray-100 focus:bg-gray-100 active:bg-gray-200 text-black"
           >
-            {getTotalCount() > 0 && (
-              <span className="text-sm mr-2">{getTotalCount()}</span>
-            )}
             <CiShoppingBasket size={25} />
           </Link>
         </div>

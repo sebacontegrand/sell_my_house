@@ -21,7 +21,7 @@ const PrelistingGrid = ({ prelistings }: Props) => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 cursor-pointer">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 ">
       {prelistings?.map((prelisting) => (
         <PrelistingItem
           key={prelisting.id}

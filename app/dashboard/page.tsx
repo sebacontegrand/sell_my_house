@@ -1,8 +1,32 @@
-const DashBoardPage = async () => {
+"use client";
+import Image from "next/image";
+import c21 from "../../public/images/c21.png";
+import Link from "next/link";
+const DashBoardPage = () => {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <div className="w-full px-3 mx-5 mb-5">Forms</div>
-      Prelisting
+    <div className="grid gap-6 md:grid-row-2 lg:grid-row-3 items-center">
+      Gestion de Clientes Century 21
+      <div className="flex flex-row gap-4 md:gap-6 lg:gap-8 text-center">
+        <Link
+          className="text-sm sm:text-base md:text-lg bg-blue-300 rounded-md p-2 text-gray-800 font-semibold hover:bg-blue-400 hover:box-shadow"
+          href={"/dashboard/propriedad"}
+        >
+          Propriedades en Gestión
+        </Link>
+        <Link
+          className="text-sm sm:text-base md:text-lg bg-blue-300 rounded-md p-2 text-gray-800 font-semibold hover:bg-blue-400 hover:box-shadow"
+          href={"/dashboard/form"}
+        >
+          Prelistings
+        </Link>
+        <Link
+          className="text-sm sm:text-base md:text-lg bg-blue-300 rounded-md p-2 text-gray-800 font-semibold hover:bg-blue-400 hover:box-shadow"
+          href={"/dashboard/feedback"}
+        >
+          FeedBack a Clientes
+        </Link>
+      </div>
+      <Image src={c21} alt={""} />
     </div>
   );
 };

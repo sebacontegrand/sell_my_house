@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "FeedBack" ALTER COLUMN "valoracion" DROP NOT NULL,
+ALTER COLUMN "masgusto" DROP NOT NULL,
+ALTER COLUMN "menosgusto" DROP NOT NULL,
+ALTER COLUMN "feedEstado" DROP NOT NULL,
+ALTER COLUMN "feedInmueble" DROP NOT NULL,
+ALTER COLUMN "feedUbicacion" DROP NOT NULL;
