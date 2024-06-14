@@ -22,13 +22,7 @@ const nextConfig = {
         }]
     },
 
-    env: {
-        POSTGRES_URL: process.env.POSTGRES_URL,
-        AUTH_SECRET: process.env.AUTH_SECRET,
-        NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-        AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
-        AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET
-    }
+
 }
     ;
 
