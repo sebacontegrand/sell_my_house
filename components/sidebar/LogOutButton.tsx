@@ -11,6 +11,7 @@ import {
 
 const LogOutButton = () => {
   const { data: session, status } = useSession();
+  console.log("%c Line:14 🍭 session", "color:#7f2b82", session);
   if (status === "loading") {
     return (
       <div className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
