@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "vercel-build":"prisma generate && next build"
+    "vercel-build": "prisma generate && next build"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.1.0",
@@ -27,7 +27,7 @@
     "cookies-next": "^4.1.1",
     "date-fns": "^3.6.0",
     "next": "14.2.3",
-    "next-auth": "^5.0.0-beta.18",
+    "next-auth": "^5.0.0-beta.19",
     "pg": "^8.11.5",
     "react": "^18",
     "react-day-picker": "^8.10.1",
