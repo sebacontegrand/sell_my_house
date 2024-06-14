@@ -20,10 +20,8 @@ const nextConfig = {
             hostname: 'http2.mlstatic.com'
 
         }]
-    }
+    },
 
-};
-module.exports = {
     env: {
         POSTGRES_URL: process.env.POSTGRES_URL,
         AUTH_SECRET: process.env.AUTH_SECRET,
@@ -32,5 +30,7 @@ module.exports = {
         AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET
     }
 }
+    ;
+
 
 export default nextConfig;
