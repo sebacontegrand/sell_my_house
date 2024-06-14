@@ -18,8 +18,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   secret:process.env.NEXTAUTH_SECRET,
   providers: [GoogleProvider({
-    clientId: process.env.NEXTAUTH_GOOGLE_ID,
-    clientSecret: process.env.NEXTAUTH_GOOGLE_SECRET
+    clientId: process.env.AUTH_GOOGLE_ID,
+    clientSecret: process.env.AUTH_GOOGLE_SECRET
   }),github],
   callbacks: {
     async jwt({ token, user }) {
