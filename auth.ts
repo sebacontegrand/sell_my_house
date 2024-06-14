@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client"
 import NextAuth, { DefaultSession } from "next-auth"
 import github from "next-auth/providers/github"
 import google from "next-auth/providers/google"
-
+import GoogleProvider from "next-auth/providers/google";
 declare module "next-auth"{
   interface Session{
     user:{
@@ -17,7 +17,10 @@ const prisma = new PrismaClient()
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   secret:process.env.NEXTAUTH_SECRET,
-  providers: [google,github],
+  providers: [GoogleProvider({
+    clientId: process.env.NEXTAUTH_GOOGLE_ID,
+    clientSecret: process.env.NEXTAUTH_GOOGLE_SECRET
+  }),github],
   callbacks: {
     async jwt({ token, user }) {
       if (user) { 
@@ -39,5 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   
 })
+
+
 
 
