@@ -14,9 +14,7 @@ declare module "next-auth"{
   }
 }
 const prisma = new PrismaClient()
-console.log("AUTH_SECRET:", process.env.AUTH_SECRET)
-console.log("AUTH_GOOGLE_ID:", process.env.AUTH_GOOGLE_ID)
-console.log("AUTH_GOOGLE_SECRET:", process.env.AUTH_GOOGLE_SECRET)
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   secret:process.env.AUTH_SECRET,
