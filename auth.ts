@@ -5,7 +5,7 @@ import NextAuth, { DefaultSession } from "next-auth"
 import github from "next-auth/providers/github"
 import google from "next-auth/providers/google"
 import GoogleProvider from "next-auth/providers/google";
-import dotenv from "dotenv";
+
 declare module "next-auth"{
   interface Session{
     user:{
@@ -14,7 +14,7 @@ declare module "next-auth"{
     }& DefaultSession["user"]
   }
 }
-dotenv.config();
+
 const prisma = new PrismaClient()
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
