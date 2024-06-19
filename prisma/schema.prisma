@@ -9,9 +9,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+ provider = "postgresql"
+  url      = env("POSTGRES_URL")
+  // url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Prelisting {
@@ -40,14 +41,19 @@ model Form {
   ocupacion Boolean?
   selltobuy Boolean?
   solvebeforesell solveEnum?
+  otrosolvebeforesell String?
   includedinsell includeEnum?
+  otrosincludedinsell String?
   whenneedtomove DateTime?
   whyneedtomove whyEnum?
+  otrosneedtomove String?
   neighbors String?
   neighborhood String?
   typeoperation typeEnum?
+  otrotypeoperation String?
   direccion String?
   propertytype propEnum?
+  otropropertytype String?
   ambientes Int?
   orientacion orientEnum?
   impuestos Int?
@@ -78,6 +84,7 @@ model Form {
   mdorm1l Int?
   mdorm2a Int?
   mdorm2l Int?
+  mdorm3a Int?
   mdorm3l Int?
   mdorm4a Int?
   mdorm4l Int?
@@ -91,6 +98,10 @@ model Form {
   mcochl Int?
   mpiletaa Int?
   mpiletal Int?
+  mquinchoa Int?
+  mquinchol Int?
+  msemicubiertoa Int?
+  msemicubiertol Int?
   escritura Boolean?
   plano Boolean?
   finalobra Boolean?

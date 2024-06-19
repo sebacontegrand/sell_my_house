@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { useReactToPrint } from "react-to-print";
+import { fetchFeedBack, updateFeedBackPUT } from "../../helpers/feedBack";
+import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
+import { SpinnerDotted } from "spinners-react";
 import {
   FormControl,
   FormField,
@@ -19,14 +23,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { feedBackSchema } from "./Fschema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { FeedAction } from "@/components/actions/feed-action";
-// import { FeedBack } from "@prisma/client";
+
+interface UpdateFeedBackFormProps {
+  id: string;
+}
 import {
   feedEstadoEnum,
   feedInmuebleEnum,
@@ -34,12 +39,12 @@ import {
   valoracionEnum,
 } from "@prisma/client";
 
-type NewFeedBackFormProps = {
-  feedBackId: string;
-};
+const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
+  const router = useRouter();
+  const componentRef = useRef<HTMLFormElement>(null);
+  const [loading, setLoading] = useState(true);
 
-const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
-  const feedback = useForm<z.infer<typeof feedBackSchema>>({
+  const updateFeedBack = useForm<z.infer<typeof feedBackSchema>>({
     resolver: zodResolver(feedBackSchema),
     defaultValues: {
       date: new Date().toISOString().split("T")[0],
@@ -54,61 +59,83 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
       feedUbicacion: feedubicacionEnum.Malo,
     },
   });
-  const id = localStorage.getItem("feedBackId");
-
   const [progress, setProgress] = React.useState(13);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        const data = await fetchFeedBack(id as string);
+        const formatDateString = (dateString: string | undefined) => {
+          if (!dateString) return new Date().toISOString().split("T")[0];
+          const date = new Date(dateString);
+          return isNaN(date.getTime())
+            ? new Date().toISOString().split("T")[0]
+            : date.toISOString().split("T")[0];
+        };
+        const formattedData = {
+          ...data,
+          date: formatDateString(data.date),
+        };
+        updateFeedBack.reset(formattedData);
+        console.log("%c Line:128 🍣 data", "color:#42b983", data);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, [id, updateFeedBack]);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   const onSubmit = async (values: z.infer<typeof feedBackSchema>) => {
-    console.log("Form Submitted");
-    const prelistingId = id?.toString()!;
-    console.log("%c Line:60 🥒 feedBackId", "color:#465975", prelistingId);
-
     console.log("Submitted Values:", values);
+    const formatDateString = (dateString: string | undefined): string => {
+      if (!dateString) {
+        return new Date().toISOString().split("T")[0];
+      }
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return new Date().toISOString().split("T")[0];
+      }
+      return date.toISOString().split("T")[0];
+    };
     const transformedValues = {
       ...values,
-      date: new Date(values.date).toISOString(),
+      date: formatDateString(values.date),
     };
-    console.log(
-      "%c Line:69 🍫 transformedValues",
-      "color:#3f7cff",
-      transformedValues
-    );
-    try {
-      const feed = await FeedAction(
-        prelistingId!,
-        values.asesorCaptador,
-        values.asesorVendedor,
-        transformedValues.date!,
-        transformedValues.masgusto,
-        transformedValues.menosgusto,
-        transformedValues.oferta!,
-        transformedValues.valoracion,
-        transformedValues.feedEstado,
-        transformedValues.feedInmueble,
-        transformedValues.feedUbicacion
-      );
-      console.log("%c Line:74 🍌 prelistingId", "color:#465975", prelistingId);
-      console.log("%c Line:73 🌮 feed", "color:#ea7e5c", feed);
+    console.log("Transformed Values:", transformedValues); // Log transformed values
 
-      feedback.reset();
+    try {
+      await updateFeedBackPUT(id!, transformedValues); // Ensure `id` is passed correctly
+      console.log("Update successful");
     } catch (error) {
-      console.error("Error creating feedback:", error);
+      console.error("Update failed", error);
     }
+
+    updateFeedBack.reset();
+    router.push("/dashboard/feedback");
   };
-  useEffect(() => {
-    const timer = setTimeout(() => setProgress(66), 500);
-    return () => clearTimeout(timer);
-  }, []);
+
+  if (loading)
+    return (
+      <SpinnerDotted
+        size={50}
+        thickness={100}
+        speed={100}
+        color="rgba(172, 125, 57, 1)"
+      />
+    );
+
   return (
-    <FormProvider {...feedback}>
+    <FormProvider {...updateFeedBack}>
       <div className="flex flex-col">
         <span className="mb-4 font-mono text-gray-500">FeedBack Id: {id}</span>
       </div>
       <form
-        onSubmit={feedback.handleSubmit(onSubmit)}
+        ref={componentRef}
+        onSubmit={updateFeedBack.handleSubmit(onSubmit)}
         className="flex flex-col text-xl w-full gap-4 max-w-xl text-pretty text-gray-600"
       >
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="date"
           render={({ field }) => (
             <FormItem>
@@ -121,7 +148,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
         />
 
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="asesorCaptador"
           render={({ field }) => (
             <FormItem>
@@ -133,7 +160,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
           )}
         />
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="asesorVendedor"
           render={({ field }) => (
             <FormItem>
@@ -147,7 +174,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
         <span>Preguntas al Comprador:</span>
         <hr />
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="masgusto"
           render={({ field }) => (
             <FormItem>
@@ -162,7 +189,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
           )}
         />
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="menosgusto"
           render={({ field }) => (
             <FormItem>
@@ -182,7 +209,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
           precio, exrituracion) realizaria una oferta para este inmueble?
         </span>
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="oferta"
           render={({ field }) => (
             <FormItem>
@@ -201,7 +228,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
         />
 
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="feedEstado"
           render={({ field }) => (
             <FormItem>
@@ -224,7 +251,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
           )}
         />
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="feedInmueble"
           render={({ field }) => (
             <FormItem>
@@ -249,7 +276,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
           )}
         />
         <FormField
-          control={feedback.control}
+          control={updateFeedBack.control}
           name="feedUbicacion"
           render={({ field }) => (
             <FormItem>
@@ -273,10 +300,17 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
             </FormItem>
           )}
         />
-        <Button type="submit">Crear FeedBack</Button>
+        <div className="flex flex-row justify-center  m-2">
+          <Button className="p-2 m-2" type="submit">
+            Guardar FeedBack
+          </Button>
+          <Button className="p-2 m-2" onClick={handlePrint}>
+            Imprimir
+          </Button>
+        </div>
       </form>
     </FormProvider>
   );
 };
 
-export default NewFeedBackForm;
+export default UpdateFeedBackForm;

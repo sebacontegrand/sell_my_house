@@ -1,8 +1,10 @@
-import { Form, Prelisting } from '@prisma/client';
+import { formSchema } from '@/components/forms/Zschema';
+import { Form } from '@prisma/client';
+import { z } from 'zod';
 
 
-export const updateForm=async(prelistingId: string,date: Date,email:string,asesor:string,proprietario:string,celular:number):Promise<Form>=>{
-    const body={prelistingId,date,asesor,proprietario,celular}
+export const updateForm=async(prelistingId: string,date: Date,email:string,asesor:string,proprietario:string,celular:number,):Promise<Form>=>{
+    const body={prelistingId,date,email,asesor,proprietario,celular}
     const formDb= await fetch(`/api/form/${prelistingId}`,{
         method:'PUT',
         body:JSON.stringify(body),
@@ -15,8 +17,8 @@ export const updateForm=async(prelistingId: string,date: Date,email:string,aseso
     return formDb;
 }
 
-export const createForm=async(prelistingId: string,date: Date,email:string,asesor:string,proprietario:string,celular:number):Promise<Form>=>{
-    const body={prelistingId,date,email,asesor,proprietario,celular}
+export const createForm=async(prelistingId: string,transformedValues:z.infer<typeof formSchema>):Promise<Form>=>{
+    const body={prelistingId,...transformedValues}
     console.log("Body to be sent:", body);
     
     const formDb= await fetch(`/api/form`,{
@@ -57,16 +59,29 @@ export const fetchForm = async (id: string) => {
   };
   
 
-  export const updateFormPUT=async(prelistingId: string,date: Date,email:string,asesor:string,proprietario:string,celular:number):Promise<Form>=>{
-    const body={prelistingId,date,asesor,proprietario,celular}
-    const formDb= await fetch(`/api/form/${prelistingId}`,{
-        method:'PUT',
-        body:JSON.stringify(body),
-        headers:{
-            'content-Type':'application/json'
+  export const updateFormPUT=async(prelistingId: string,transformedValues:z.infer<typeof formSchema>):Promise<Form>=>{
+    const body={prelistingId,...transformedValues}
+    
+    try {
+        const response = await fetch(`/api/form/${prelistingId}`, {
+          method: 'PUT',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+    
+        // Check if the response is successful
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-    }).then(res=>res.json())
     
-    
-    return formDb;
-}
+        // Parse the response as JSON
+        const formDb = await response.json();
+        
+        return formDb;
+      } catch (error) {
+        console.error('Error in updateFormPUT:', error);
+        throw error;
+      }
+    };

@@ -26,7 +26,7 @@ export const FeedBackGrid = ({ feedBacks }: Props) => {
     }
   };
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 cursor-pointer">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 cursor-pointer">
       {feedBacks.map(async (f) => {
         const prelisting = await getPrelistingDataByID(f.prelistingId);
         return (

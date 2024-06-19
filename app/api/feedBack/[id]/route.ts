@@ -11,9 +11,9 @@ interface Segments {
 export async function GET(request: Request, { params }: Segments) {
   const { id:feedId } = params;
   if (!feedId) {
-    console.error("formId is undefined");
+    console.error("feedId is undefined");
     return new Response(
-      JSON.stringify({ error: 'formId is undefined' }),
+      JSON.stringify({ error: 'feedId is undefined' }),
       {
         status: 400,
         headers: {
@@ -34,12 +34,10 @@ export async function GET(request: Request, { params }: Segments) {
     console.log(feedById); 
 
     if (feedById) {
-      const serializedForm = JSON.parse(JSON.stringify(feedById, (key, value) =>
-        typeof value === 'bigint' ? value.toString() : value
-      ));
+     
 
       return new Response(
-        JSON.stringify({ exists: true, form: serializedForm }),
+        JSON.stringify({ exists: true, form: feedById }),
         {
           status: 200,
           headers: {
@@ -69,5 +67,51 @@ export async function GET(request: Request, { params }: Segments) {
         },
       }
     );
+  }
+}
+export async function PUT(request:Request, { params }: Segments) {
+  const { id: feedId } = params;
+  const body = await request.json();
+
+  if (!feedId) {
+    return new Response(JSON.stringify({ error: 'feedId is undefined' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+  console.log("feedId:", feedId); // Log feedId
+  console.log("Request body:", body); // Log request body
+
+  if (body.date) {
+    body.date = new Date(body.date).toISOString();
+  }
+  try {
+    const existingFeedBack = await prisma.feedBack.findUnique({
+      where: { prelistingId: feedId },
+    });
+
+    if (!existingFeedBack) {
+      return new Response(JSON.stringify({ error: 'Record not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    
+    const updatedFeedBack = await prisma.feedBack.update({
+      where: { prelistingId: feedId },
+      data: body,
+    });
+
+    return new Response(JSON.stringify(updatedFeedBack), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error("Error updating feedback:", error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
