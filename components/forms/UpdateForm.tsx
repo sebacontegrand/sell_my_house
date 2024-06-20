@@ -41,6 +41,7 @@ import { formSchema } from "./Zschema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { transform } from "next/dist/build/swc";
+import { totalmem } from "os";
 
 interface UpdateFormProps {
   id: string;
@@ -138,29 +139,51 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
     setShowAlert(false);
     router.push("/dashboard/form");
   };
-  const calculateAreas = (formData: FormData): Record<string, number> => {
-    console.log(
-      "%c Line:141 🍅 calculateAreas",
-      "color:#fca650",
-      calculateAreas
-    );
-    const areas: Record<string, number> = {};
+  const [totalArea, setTotalArea] = useState<number>(0);
+  useEffect(() => {
+    const calculateTotalArea = () => {
+      const fields = form.getValues([
+        "mlivinga",
+        "mlivingl",
+        "mcomedora",
+        "mcomedorl",
+        "mcocinaa",
+        "mcocinal",
+        "mdorm1a",
+        "mdorm1l",
+        "mdorm2a",
+        "mdorm2l",
+        "mdorm3a",
+        "mdorm3l",
+        "mdorm4a",
+        "mdorm4l",
+        "mlava",
+        "mlavl",
+        "mhalla",
+        "mhalll",
+        "mbanosa",
+        "mbanosl",
+        "mcocha",
+        "mcochl",
+        "mpiletaa",
+        "mpiletal",
+        "mquinchoa",
+        "mquinchol",
+        "msemicubiertoa",
+        "msemicubiertol",
+      ]);
 
-    Object.keys(formData).forEach((key) => {
-      if (key.startsWith("m") && key.endsWith("a")) {
-        const roomName = key.slice(1, -1);
-        const width = formData[key as keyof FormData] as unknown as number;
-        const lengthKey = `m${roomName}l` as keyof FormData;
-        const length = formData[lengthKey] as unknown as number;
+      let total = 0;
+      Object.values(fields).forEach((value) => {
+        total += Number(value) || 0;
+      });
 
-        if (!isNaN(width) && !isNaN(length)) {
-          areas[roomName] = width * length;
-        }
-      }
-    });
+      setTotalArea(total);
+    };
 
-    return areas;
-  };
+    const subscription = form.watch(() => calculateTotalArea());
+    return () => subscription.unsubscribe();
+  }, [form]);
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -1728,6 +1751,10 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                 </FormItem>
               )}
             />
+          </div>
+          {<span>Superficie total: {totalArea} m2</span>}
+          <div>
+            <span>Comentarios adicionales:</span>
             <FormField
               control={form.control}
               name="comentarios"
