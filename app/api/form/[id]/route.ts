@@ -46,3 +46,31 @@ export async function GET(request: Request, { params }: Segments) {
     );
   }
 }
+export async function PUT(request: Request, { params }: Segments) {
+  const { id } = params;
+
+  try {
+    const body = await request.json();
+    console.log(`Updating form with prelistingId: ${id}`, body);
+
+    const updatedForm = await prisma.form.update({
+      where: { prelistingId: id },
+      data: {
+        ...body,
+        date: new Date(body.date), // Ensure date is a valid Date object
+        fechadenacimiento: new Date(body.fechadenacimiento), // Ensure date is a valid Date object
+        whenneedtomove: new Date(body.whenneedtomove), // Ensure date is a valid Date object
+      },
+    });
+
+    const formResponse = serializeWithBigInt(updatedForm);
+    return NextResponse.json(formResponse);
+  } catch (error) {
+    console.error('Error updating form:', error);
+    return NextResponse.json(
+      { error: 'Server error' },
+      { status: 500 }
+    );
+  }
+}
+

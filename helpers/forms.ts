@@ -3,8 +3,8 @@ import { Form } from '@prisma/client';
 import { z } from 'zod';
 
 
-export const updateForm=async(prelistingId: string,date: Date,email:string,asesor:string,proprietario:string,celular:number,):Promise<Form>=>{
-    const body={prelistingId,date,email,asesor,proprietario,celular}
+export const updateForm=async(prelistingId: string,transformedValues:z.infer<typeof formSchema>):Promise<Form>=>{
+    const body={prelistingId,...transformedValues}
     const formDb= await fetch(`/api/form/${prelistingId}`,{
         method:'PUT',
         body:JSON.stringify(body),

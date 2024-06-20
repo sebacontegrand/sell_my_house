@@ -7,6 +7,7 @@ import {
   IoCheckboxOutline,
   IoPencil,
   IoSquareOutline,
+  IoPrint,
 } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { Form } from "@prisma/client";
@@ -59,7 +60,12 @@ const FormItem: React.FC<FormItemProps> = ({
           color="gray"
           size={20}
         />
-
+        <IoPrint
+          onClick={handleClick}
+          className="absolute top-12 right-2 hover:bg-opacity-60"
+          color="gray"
+          size={20}
+        />
         <div className="flex flex-col sm:flex-row justify-start items-center gap-4">
           <div
             className={`flex p-2 rounded-md  hover:bg-opacity-60 ${

@@ -23,10 +23,10 @@ const SidebarItem = ({ icon, path, title, onClick }: Props) => {
           onClick={handleClick}
           href={path}
           className={`px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group
-          hover:bg-gradient-to-r hover:bg-sky-600 hover:text-white
+          hover:bg-gradient-to-r hover:bg-yellow-600 hover:text-white
           ${
             path === pathName
-              ? "text-white bg-gradient-to-r from-sky-600 to-cyan-400"
+              ? "text-white bg-gradient-to-r from-yellow-600 to-yellow-800"
               : ""
           }
           `}

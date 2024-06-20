@@ -148,7 +148,7 @@ const NewForm = () => {
     );
     try {
       await createForm(prelistingId, transformedValues);
-
+      setShowAlert(true);
       form.reset();
       router.push("/dashboard/form");
     } catch (error) {

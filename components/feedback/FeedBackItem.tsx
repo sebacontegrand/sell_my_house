@@ -1,8 +1,14 @@
 /* eslint-disable @next/next/no-async-client-component */
 "use client";
 import React from "react";
+
 import styles from "./FeedBackItem.module.css";
-import { IoCheckboxOutline, IoSquareOutline } from "react-icons/io5";
+import {
+  IoCheckboxOutline,
+  IoPencil,
+  IoPrintOutline,
+  IoSquareOutline,
+} from "react-icons/io5";
 import { useRouter } from "next/navigation";
 
 interface FeedItemProps {
@@ -28,14 +34,33 @@ const FeedBackItem: React.FC<FeedItemProps> = ({
   const handleClick = () => {
     router.push("/dashboard/feedback/");
   };
-
+  const handleClickUpdate = () => {
+    localStorage.setItem("id", id!);
+    router.push(`/dashboard/feedBackToUpdate?id=${id}`);
+  };
+  const handleClickPrint = () => {};
   return (
     <div>
-      <div className={!oferta ? styles.feedBackDone : styles.feedBackPending}>
+      <div
+        className={!oferta ? styles.feedBackDone : styles.feedBackPending}
+        style={{ position: "relative" }}
+      >
+        <IoPencil
+          onClick={handleClickUpdate}
+          className="absolute top-4 right-2 hover:bg-opacity-60 cursor-pointer"
+          color="black"
+          size={20}
+        />
+        <IoPrintOutline
+          onClick={handleClickUpdate}
+          className="absolute top-12 right-2 hover:bg-opacity-60 cursor-pointer"
+          color="black"
+          size={20}
+        />
         <div className="flex flex-col sm:flex-row justify-start items-center gap-4">
           <div
-            className={`flex p-2 rounded-md cursor-pointer hover:bg-opacity-60 ${
-              id === "" ? "bg-blue-100" : "bg-red-100"
+            className={`flex p-2 rounded-md   ${
+              !oferta ? styles.feedBackDone : styles.feedBackPending
             }`}
           >
             {oferta ? (

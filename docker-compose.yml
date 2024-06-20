@@ -1,15 +1,17 @@
 version: '3'
 
 services:
- prelistingDB:
+  prelisting-db:
     image: postgres:15.3
     container_name: prelisting-db
     restart: always
     ports:
       - 5432:5432
-
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+     - pgdata:/var/lib/postgresql/data
+      # - ./postgres:/var/lib/postgresql/data
+volumes:
+  pgdata:

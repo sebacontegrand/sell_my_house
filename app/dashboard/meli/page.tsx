@@ -40,9 +40,24 @@ const MeliSearch = () => {
         const meliQuery =
           "Antiguedad<10 años " +
           "USD " +
-          meliData.valorventa +
+          meliData?.valorventa +
           "precio " +
           "zona: " +
+          meliData?.direccion +
+          "dormitorios: " +
+          meliData?.dormitorios +
+          "habitaciones: " +
+          meliData?.habitaciones +
+          "baños: " +
+          meliData?.baños +
+          "pisos: " +
+          meliData?.pisos +
+          "habitaciones: " +
+          meliData?.habitaciones +
+          "baños: " +
+          meliData?.baños +
+          "pisos: " +
+          meliData?.pisos +
           meliData.comentarios;
 
         const response = await fetch(
@@ -92,7 +107,10 @@ const MeliSearch = () => {
       <h1>Properties for Sale in City Bell</h1>
       <ul>
         {data.results.map((property: Property) => (
-          <li className="my-16 mx-32 rounded-md bg-slate-100" key={property.id}>
+          <li
+            className="md:my-16 md:mx-32 sm:mx-1 sm:my-2 sm:rounded-md bg-slate-100"
+            key={property.id}
+          >
             <h2>{property.title}</h2>
             <p>Price: ${property.price}</p>
             <p>Condition: {property.condition}</p>
@@ -107,9 +125,8 @@ const MeliSearch = () => {
             <Image
               src={property.thumbnail}
               alt={property.title}
-              width={200}
-              height={200}
-              layout="responsive"
+              width={600}
+              height={600}
             />
             <hr />
           </li>

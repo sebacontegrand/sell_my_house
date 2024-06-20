@@ -26,7 +26,7 @@ export const FormGrid = ({ forms }: Props) => {
   console.log("%c Line:11 🌶 form", "color:#2eafb0", forms);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 cursor-pointer">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 cursor-pointer">
       {forms?.map((f) => (
         <FormItem
           key={f.id}
