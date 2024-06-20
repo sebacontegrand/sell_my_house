@@ -43,6 +43,7 @@ import {
   feedubicacionEnum,
   valoracionEnum,
 } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 type NewFeedBackFormProps = {
   feedBackId: string;
@@ -69,6 +70,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
   const handleAlertAction = () => {
     setShowAlert(false);
   };
+  const router = useRouter();
   const onSubmit = async (values: z.infer<typeof feedBackSchema>) => {
     const prelistingId = id?.toString()!;
 
@@ -92,6 +94,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
         transformedValues.feedUbicacion
       );
       setShowAlert(true);
+      router.push("/dashboard/feedback");
       feedback.reset();
     } catch (error) {
       console.error("Error creating feedback:", error);

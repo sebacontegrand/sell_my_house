@@ -56,6 +56,7 @@ const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
   const [showAlert, setShowAlert] = useState(false);
   const handleAlertAction = () => {
     setShowAlert(false);
+    router.push("/dashboard/feedback");
   };
   const updateFeedBack = useForm<z.infer<typeof feedBackSchema>>({
     resolver: zodResolver(feedBackSchema),
@@ -72,7 +73,7 @@ const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
       feedUbicacion: feedubicacionEnum.Malo,
     },
   });
-  const [progress, setProgress] = React.useState(13);
+
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -118,13 +119,12 @@ const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
 
     try {
       await updateFeedBackPUT(id!, transformedValues);
-      setShowAlert(true); // Ensure `id` is passed correctly
+      setShowAlert(true);
     } catch (error) {
       console.error("Update failed", error);
     }
-
+    setShowAlert(true);
     updateFeedBack.reset();
-    router.push("/dashboard/feedback");
   };
 
   if (loading)
@@ -139,7 +139,6 @@ const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
 
   return (
     <>
-      {" "}
       {showAlert && (
         <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
           <AlertDialogContent>

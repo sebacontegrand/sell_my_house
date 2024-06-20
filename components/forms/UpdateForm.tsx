@@ -136,6 +136,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
   const [showAlert, setShowAlert] = useState(false);
   const handleAlertAction = () => {
     setShowAlert(false);
+    router.push("/dashboard/form");
   };
   const calculateAreas = (formData: FormData): Record<string, number> => {
     console.log(
@@ -241,7 +242,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
     await updateFormPUT(id!, transformedValues);
     setShowAlert(true);
     form.reset();
-    router.push("/dashboard/form");
+
     setLoading(false);
   };
 

@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import c21 from "../../public/images/c21.png";
+import house from "../../public/images/house.jpg";
 import Link from "next/link";
 const DashBoardPage = () => {
   return (
