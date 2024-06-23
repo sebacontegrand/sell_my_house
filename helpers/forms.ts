@@ -1,5 +1,5 @@
 import { formSchema } from '@/components/forms/Zschema';
-import { Form } from '@prisma/client';
+import { Form, Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 
@@ -42,7 +42,6 @@ export const deletedform=async():Promise<void>=>{
     
      await fetch(`/api/form`,{
         method:'DELETE',
-        
         headers:{
             'content-Type':'application/json'
         }
@@ -57,9 +56,9 @@ export const fetchForm = async (id: string) => {
     }
     return await response.json();
   };
-  
+  type Formz = z.infer<typeof formSchema>;
 
-  export const updateFormPUT=async(prelistingId: string,transformedValues:z.infer<typeof formSchema>):Promise<Form>=>{
+  export const updateFormPUT=async(prelistingId: string,transformedValues:Formz):Promise<Form>=>{
     const body={prelistingId,...transformedValues}
     
     try {
@@ -85,3 +84,4 @@ export const fetchForm = async (id: string) => {
         throw error;
       }
     };
+   

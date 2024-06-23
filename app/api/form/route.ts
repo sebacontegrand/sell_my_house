@@ -120,48 +120,31 @@ export async function POST(request:Request){
         return NextResponse.json('No autorizado',{status:401})
     }
    
-try {
+    try {
+        const validatedData = await postSchema.validate(await request.json());
     
-    const {prelistingId,date,email,asesor,proprietario,celular,fechadenacimiento,whysell,ocupacion,
-        selltobuy,solvebeforesell,otrosolvebeforesell,includedinsell,otrosincludedinsell,whenneedtomove,
-        whyneedtomove,otrosneedtomove,neighbors,neighborhood,typeoperation,otrotypeoperation,direccion,
-        propertytype,otropropertytype,ambientes,orientacion,impuestos,expensas,servicios,valoralquiler,
-        valorventa,antiguedad,estado,heattype,plantas,cocheras,banos,toilette,dormitorio,dormitorioserv,
-        amenities,baulera,cantascensores,categoria,mlivinga,mlivingl,mcomedora,mcomedorl,mcocinaa,mcocinal,
-        mdorm1a,mdorm1l,mdorm2a,mdorm2l,mdorm3a,mdorm3l,mdorm4a,mdorm4l,mlava,mlavl,mhalla,mhalll,mbanosa,
-        mbanosl,mcocha,mcochl,mpiletaa,mpiletal,mquinchol,mquinchoa,msemicubiertoa,msemicubiertol,escritura,
-        plano,finalobra,comentarios}= await postSchema.validate(await request.json())
-   
-    console.log("%c Line:26 🥛 celular", "color:#ed9ec7", celular);
-  
-    const existingForm = await prisma.form.findUnique({
-        where: { prelistingId },
-    });
-
-    if (existingForm) {
-        return NextResponse.json({ error: 'A form with this prelistingId already exists.' }, { status: 400 });
-    }
+        const { prelistingId, ...formData } = validatedData;
     
-    const form= await prisma.form.create({data:{prelistingId,date,email,asesor,proprietario,celular,fechadenacimiento,whysell,ocupacion,
-        selltobuy,solvebeforesell,otrosolvebeforesell,includedinsell,otrosincludedinsell,whenneedtomove,
-        whyneedtomove,otrosneedtomove,neighbors,neighborhood,typeoperation,otrotypeoperation,direccion,
-        propertytype,otropropertytype,ambientes,orientacion,impuestos,expensas,servicios,valoralquiler,
-        valorventa,antiguedad,estado,heattype,plantas,cocheras,banos,toilette,dormitorio,dormitorioserv,
-        amenities,baulera,cantascensores,categoria,mlivinga,mlivingl,mcomedora,mcomedorl,mcocinaa,mcocinal,
-        mdorm1a,mdorm1l,mdorm2a,mdorm2l,mdorm3a,mdorm3l,mdorm4a,mdorm4l,mlava,mlavl,mhalla,mhalll,mbanosa,
-        mbanosl,mcocha,mcochl,mpiletaa,mpiletal,mquinchol,mquinchoa,msemicubiertoa,msemicubiertol,escritura,
-        plano,finalobra,comentarios}})
+        const existingForm = await prisma.form.findUnique({
+          where: { prelistingId },
+        });
     
-    const formResponse = serializeWithBigInt(form);
-    return NextResponse.json(formResponse)
-} catch (error) {
-    console.error('Error occurred:', error);
+        if (existingForm) {
+          return NextResponse.json({ error: 'A form with this prelistingId already exists.' }, { status: 400 });
+        }
+    
+        const form = await prisma.form.create({ data: validatedData });
+    
+        const formResponse = serializeWithBigInt(form);
+        return NextResponse.json(formResponse);
+      } catch (error) {
+        console.error('Error occurred:', error);
         if (error instanceof yup.ValidationError) {
-            return NextResponse.json({ error: error.errors }, { status: 400 });
+          return NextResponse.json({ error: error.errors }, { status: 400 });
         }
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+      }
     }
-}
 
 
 

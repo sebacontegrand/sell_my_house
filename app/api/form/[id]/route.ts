@@ -65,12 +65,19 @@ export async function PUT(request: Request, { params }: Segments) {
 
     const formResponse = serializeWithBigInt(updatedForm);
     return NextResponse.json(formResponse);
-  } catch (error) {
+  } catch (error:unknown) {
     console.error('Error updating form:', error);
+    if (error instanceof Error && error.name === 'NotFoundError') {
+      return NextResponse.json(
+        { error: 'Form not found' },
+        { status: 404 }
+      );
+    }
+    }
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }
     );
   }
-}
+
 
