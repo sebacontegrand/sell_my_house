@@ -74,34 +74,35 @@ model Form {
   baulera Boolean?
   cantascensores Int?
   categoria catEnum?
-  mlivinga Int?
-  mlivingl Int?
-  mcomedora Int?
-  mcomedorl Int?
-  mcocinaa Int?
-  mcocinal Int?
-  mdorm1a Int?
-  mdorm1l Int?
-  mdorm2a Int?
-  mdorm2l Int?
-  mdorm3a Int?
-  mdorm3l Int?
-  mdorm4a Int?
-  mdorm4l Int?
-  mlava Int?
-  mlavl Int?
-  mhalla Int?
-  mhalll Int?
-  mbanosa Int?
-  mbanosl Int?
-  mcocha Int?
-  mcochl Int?
-  mpiletaa Int?
-  mpiletal Int?
-  mquinchoa Int?
-  mquinchol Int?
-  msemicubiertoa Int?
-  msemicubiertol Int?
+  mlivinga Decimal? 
+  mlivingl Decimal? 
+  mcomedora Decimal? 
+  mcomedorl Decimal? 
+  mcocinaa Decimal? 
+  mcocinal Decimal? 
+  mdorm1a Decimal? 
+  mdorm1l Decimal? 
+  mdorm2a Decimal? 
+  mdorm2l Decimal? 
+  mdorm3a Decimal? 
+  mdorm3l Decimal? 
+  mdorm4a Decimal? 
+  mdorm4l Decimal? 
+  mlava Decimal? 
+  mlavl Decimal? 
+  mhalla Decimal? 
+  mhalll Decimal? 
+  mbanosa Decimal? 
+  mbanosl Decimal? 
+  mcocha Decimal? 
+  mcochl Decimal? 
+  mpiletaa Decimal? 
+  mpiletal Decimal? 
+  mquinchoa Decimal? 
+  mquinchol Decimal? 
+  msemicubiertoa Decimal? 
+  msemicubiertol Decimal? 
+ 
   escritura Boolean?
   plano Boolean?
   finalobra Boolean?

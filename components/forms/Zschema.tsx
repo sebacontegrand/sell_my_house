@@ -92,7 +92,7 @@ export const formSchema = z
     dormitorioserv: z.boolean(),
     amenities: z.boolean(),
     baulera: z.boolean(),
-    cantascensores: z.number().nonnegative(),
+    cantascensores: z.number(),
     categoria: z.enum(["Altonivel", "excelente", "muybueno", "regular"]),
     mlivinga: z.number().nonnegative(),
     mlivingl: z.number().nonnegative(),

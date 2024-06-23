@@ -174,9 +174,12 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
       ]);
 
       let total = 0;
-      Object.values(fields).forEach((value) => {
-        total += Number(value) || 0;
-      });
+      if (fields[fields.length - 1] !== undefined) {
+        for (let i = 0; i < fields.length; i += 2) {
+          total += fields[i] * fields[i + 1];
+          console.log("%c Line:201 🥔 total", "color:#6ec1c2", total);
+        }
+      }
 
       setTotalArea(total);
     };
@@ -201,9 +204,42 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
           fechadenacimiento: formatDateString(data.fechadenacimiento),
           whenneedtomove: formatDateString(data.whenneedtomove),
           celular: Number(data.celular),
+          mlivinga: data.mlivinga.d[0],
+          mlivingl: data.mlivingl.d[0],
+          mcomedora: data.mcomedora.d[0],
+          mcomedorl: data.mcomedorl.d[0],
+          mcocinaa: data.mcocinaa.d[0],
+          mcocinal: data.mcocinal.d[0],
+          mdorm1a: data.mdorm1a.d[0],
+          mdorm1l: data.mdorm1l.d[0],
+          mdorm2a: data.mdorm2a.d[0],
+          mdorm2l: data.mdorm2l.d[0],
+          mdorm3a: data.mdorm3a.d[0],
+          mdorm3l: data.mdorm3l.d[0],
+          mdorm4a: data.mdorm4a.d[0],
+          mdorm4l: data.mdorm4l.d[0],
+          mlava: data.mlava.d[0],
+          mlavl: data.mlavl.d[0],
+          mhalla: data.mhalla.d[0],
+          mhalll: data.mhalll.d[0],
+          mbanosa: data.mbanosa.d[0],
+          mbanosl: data.mbanosl.d[0],
+          mcocha: data.mcocha.d[0],
+          mcochl: data.mcochl.d[0],
+          mpiletaa: data.mpiletaa.d[0],
+          mpiletal: data.mpiletal.d[0],
+          mquinchoa: data.mquinchoa.d[0],
+          mquinchol: data.mquinchol.d[0],
+          msemicubiertoa: data.msemicubiertoa.d[0],
+          msemicubiertol: data.msemicubiertol.d[0],
         };
+        console.log(
+          "%c Line:202 🧀 formattedData",
+          "color:#465975",
+          formattedData
+        );
+
         form.reset(formattedData);
-        console.log("%c Line:128 🍣 data", "color:#42b983", data);
       }
       setLoading(false);
     };
@@ -260,7 +296,13 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
       date: formatDateString(values.date),
       fechadenacimiento: formatDateString(values.fechadenacimiento),
       whenneedtomove: formatDateString(values.whenneedtomove),
+      celular: Number(values.celular),
     };
+    console.log(
+      "%c Line:290 🍤 transformedValues",
+      "color:#6ec1c2",
+      transformedValues
+    );
 
     await updateFormPUT(id!, transformedValues);
     setShowAlert(true);
@@ -367,7 +409,10 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                     placeholder="celular"
                     {...field}
                     value={field.value || ""}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value)); // Convert to number or undefined
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -425,7 +470,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
               )}
             />
           </div>
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row justify-between intems-center">
             <span>Necesita vender su propiedad para comprar?</span>
             <FormField
               control={form.control}
@@ -644,37 +689,40 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
             control={form.control}
             name="typeoperation"
             render={({ field }) => (
-              <FormItem className="flex flex-row gap-2 items-center w-full">
-                <FormLabel htmlFor="typeoperation-select" className="text-xl">
-                  Tipo de operación?
-                </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+              <FormItem className="w-full">
+                <FormLabel
+                  htmlFor="typeoperation-select"
+                  className="flex flex-row items-center justify-between text-xl"
                 >
-                  <SelectTrigger
-                    id="typeoperation-select"
-                    className="w-[180px]"
+                  Tipo de operación?
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
                   >
-                    <SelectValue placeholder="Seleccione opción" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="alquiler">Alquiler</SelectItem>
-                      <SelectItem value="venta">Venta</SelectItem>
-                      <SelectItem value="alquilertemporario">
-                        Alquiler temporario
-                      </SelectItem>
-                      <SelectItem value="ventayalquiler">
-                        Venta y Alquiler
-                      </SelectItem>
-                      <SelectItem value="ventayalqtemp">
-                        Venta y alquiler temporario
-                      </SelectItem>
-                      <SelectItem value="otros">Otros</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                    <SelectTrigger
+                      id="typeoperation-select"
+                      className="w-[180px]"
+                    >
+                      <SelectValue placeholder="Seleccione opción" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="alquiler">Alquiler</SelectItem>
+                        <SelectItem value="venta">Venta</SelectItem>
+                        <SelectItem value="alquilertemporario">
+                          Alquiler temporario
+                        </SelectItem>
+                        <SelectItem value="ventayalquiler">
+                          Venta y Alquiler
+                        </SelectItem>
+                        <SelectItem value="ventayalqtemp">
+                          Venta y alquiler temporario
+                        </SelectItem>
+                        <SelectItem value="otros">Otros</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormLabel>
               </FormItem>
             )}
           />
@@ -712,37 +760,40 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="propertytype"
             render={({ field }) => (
-              <FormItem className="flex flex-row gap-2 items-center w-full">
-                <FormLabel className="text-xl">Tipo de propiedad?</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Tipo de propiedad" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="dpto">Dpto</SelectItem>
-                      <SelectItem value="casa">Casa</SelectItem>
-                      <SelectItem value="galpon">Galpon</SelectItem>
-                      <SelectItem value="local">Local</SelectItem>
-                      <SelectItem value="negocio">Negocio</SelectItem>
-                      <SelectItem value="ph">Ph</SelectItem>
-                      <SelectItem value="cochera">Cochera</SelectItem>
-                      <SelectItem value="oficina">Oficina</SelectItem>
-                      <SelectItem value="lote">Lote</SelectItem>
-                      <SelectItem value="edificio">Edificio</SelectItem>
-                      <SelectItem value="quinta">Quinta</SelectItem>
-                      <SelectItem value="campo">Campo</SelectItem>
-                      <SelectItem value="otro">Otro</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+              <FormItem className=" w-full">
+                <FormLabel className="flex felx-col text-xl items-center justify-between">
+                  Tipo de propiedad?
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Tipo de propiedad" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="dpto">Dpto</SelectItem>
+                        <SelectItem value="casa">Casa</SelectItem>
+                        <SelectItem value="galpon">Galpon</SelectItem>
+                        <SelectItem value="local">Local</SelectItem>
+                        <SelectItem value="negocio">Negocio</SelectItem>
+                        <SelectItem value="ph">Ph</SelectItem>
+                        <SelectItem value="cochera">Cochera</SelectItem>
+                        <SelectItem value="oficina">Oficina</SelectItem>
+                        <SelectItem value="lote">Lote</SelectItem>
+                        <SelectItem value="edificio">Edificio</SelectItem>
+                        <SelectItem value="quinta">Quinta</SelectItem>
+                        <SelectItem value="campo">Campo</SelectItem>
+                        <SelectItem value="otro">Otro</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormLabel>
               </FormItem>
             )}
           />
@@ -764,29 +815,32 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
               )}
             />
           )}
-          <FormField
-            control={form.control}
-            name="ambientes"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    className="mt-2 p-2 border rounded w-1/2"
-                    placeholder="Cantidad de Ambientes"
-                    {...field}
-                    value={field.value || ""}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <span className="flex flex-row text-xl items-center justify-between">
+            Cantidad de Ambientes?
+            <FormField
+              control={form.control}
+              name="ambientes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      className="mt-2 p-2 border rounded w-full"
+                      placeholder="Cantidad de Ambientes"
+                      {...field}
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </span>
           <FormField
             control={form.control}
             name="orientacion"
             render={({ field }) => (
-              <FormItem className="flex flex-row gap-2 items-center w-full">
+              <FormItem className="flex flex-row gap-2 items-center w-full justify-between">
                 <FormLabel className="text-xl">Orientacion?</FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -811,34 +865,138 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
               </FormItem>
             )}
           />
+          <hr />
           <div className="flex flex-row gap-2">
+            <span className="flex flex-col text-xs items-center">
+              Valor Impuestos?
+              <FormField
+                control={form.control}
+                name="impuestos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2  border rounded "
+                        placeholder="$ Aprox."
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Valor Expensas?
+              <FormField
+                control={form.control}
+                name="expensas"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-2 border rounded "
+                        placeholder="$ Aprox."
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+          </div>
+          <span className="flex flex-row text-xs items-center justify-between">
+            Con que servicios cuenta la propiedad?
             <FormField
               control={form.control}
-              name="impuestos"
+              name="servicios"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      className="mt-2  border rounded "
-                      placeholder="Impuestos:$ Aprox."
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
+                    <Input placeholder="Areas comunes?" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </span>
+          <div className="flex flex-row gap-2">
+            <span className="flex flex-col text-xs items-center">
+              Valor Alquiler?
+              <FormField
+                control={form.control}
+                name="valoralquiler"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2  border rounded "
+                        placeholder="$ Estimado"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Valor Venta?
+              <FormField
+                control={form.control}
+                name="valorventa"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-2 border rounded "
+                        placeholder=" $ Estimado"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+          </div>
+          <hr />
+          <span className="flex flex-row text-xl items-center justify-between">
+            Antiguedad de la Propiedad?
             <FormField
               control={form.control}
-              name="expensas"
+              name="antiguedad"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
                       className="mt-2 p-2 border rounded "
-                      placeholder="Valor de Expensas"
+                      placeholder="Antiguedad de la Propiedad."
                       {...field}
                       value={field.value || ""}
                       onChange={(e) => field.onChange(Number(e.target.value))}
@@ -848,75 +1006,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                 </FormItem>
               )}
             />
-          </div>
-          <FormField
-            control={form.control}
-            name="servicios"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="Servicios?" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex flex-row gap-2">
-            <FormField
-              control={form.control}
-              name="valoralquiler"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2  border rounded "
-                      placeholder="Valor Alquiler:$ Aprox."
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="valorventa"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="Valor de Venta:$ Aprox."
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormField
-            control={form.control}
-            name="antiguedad"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    className="mt-2 p-2 border rounded "
-                    placeholder="Antiguedad de la Propiedad."
-                    {...field}
-                    value={field.value || ""}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          </span>
           <FormField
             control={form.control}
             name="estado"
@@ -955,121 +1045,160 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
             name="heattype"
             render={({ field }) => (
               <FormItem className="flex flex-row gap-2 items-center w-full">
-                <FormLabel className="text-xl">Tipo de calefaccion?</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Bueno" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="losaradiante">
-                        Loza radiante
-                      </SelectItem>
-                      <SelectItem value="radiadores">Radiadores</SelectItem>
-                      <SelectItem value="splitfc">SplitFC</SelectItem>
-                      <SelectItem value="calefactores">Calefactores</SelectItem>
-                      <SelectItem value="central">Central</SelectItem>
-                      <SelectItem value="sin">Sin Calefaccion</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <FormLabel className="flex flex-row text-xl items-center justify-between w-full">
+                  Tipo de calefaccion?
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Bueno" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="losaradiante">
+                          Loza radiante
+                        </SelectItem>
+                        <SelectItem value="radiadores">Radiadores</SelectItem>
+                        <SelectItem value="splitfc">SplitFC</SelectItem>
+                        <SelectItem value="calefactores">
+                          Calefactores individuales
+                        </SelectItem>
+                        <SelectItem value="central">Central</SelectItem>
+                        <SelectItem value="sin">Sin Calefaccion</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormLabel>
               </FormItem>
             )}
           />
           <div className="flex flex-row gap-2">
-            <FormField
-              control={form.control}
-              name="plantas"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="Plantas?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="cocheras"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="Cocheras?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="banos"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-1 border rounded "
-                      placeholder="Baños?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dormitorio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-1 border rounded text-xs"
-                      placeholder="Dormitorios?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="toilette"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="Toilettes?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <span className="flex flex-col text-xs items-center">
+              Plantas?
+              <FormField
+                control={form.control}
+                name="plantas"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-2 border rounded "
+                        placeholder="Plantas?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Cocheras?
+              <FormField
+                control={form.control}
+                name="cocheras"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-2 border rounded "
+                        placeholder="Cocheras?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Baños?
+              <FormField
+                control={form.control}
+                name="banos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-1 border rounded "
+                        placeholder="Baños?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Dormitorios?
+              <FormField
+                control={form.control}
+                name="dormitorio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-1 border rounded text-xs"
+                        placeholder="Dormitorios?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Toilettes?
+              <FormField
+                control={form.control}
+                name="toilette"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-2 border rounded "
+                        placeholder="Toilettes?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
           </div>
           <div className="flex flex-row items-center p-2 justify-between">
             <span>Dormitorio de servicio?</span>
@@ -1134,24 +1263,29 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
               )}
             />
           </div>
+
           <FormField
             control={form.control}
             name="cantascensores"
             render={({ field }) => (
               <FormItem>
-                <FormControl>
-                  <Input
-                    className="mt-2 p-2 border rounded "
-                    placeholder="Cantidad de Ascensores?"
-                    {...field}
-                    value={field.value || ""}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
+                <FormLabel className="flex flex-row text-xl">
+                  Cantidad de Ascensores?
+                  <FormControl>
+                    <Input
+                      className="mt-2 p-2 border rounded "
+                      placeholder="Cantidad de Ascensores?"
+                      {...field}
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                </FormLabel>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="categoria"
@@ -1245,512 +1379,665 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
           <span>Dimensiones: A=Ancho x L=Largo</span>
           <hr />
           <div className="grid grid-cols-4 gap-2">
-            <FormField
-              control={form.control}
-              name="mlivinga"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=living?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mlivingl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=living?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mcomedora"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Comedor?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="mcomedorl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Comedor?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mcocinaa"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Cocina?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mcocinal"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Cocina?"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mdorm1a"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Dorm1"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mdorm1l"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="LDorm1"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mdorm2a"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Dorm2"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="mdorm2l"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Dorm2"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mdorm3a"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Dorm3"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mdorm3l"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Dorm3"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mdorm4a"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Dorm4"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mdorm4l"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Dorm4"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mlava"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Lavadero"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mlavl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Lavadero"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mhalla"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Hall"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mhalll"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Hall"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mbanosa"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Banos"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mbanosl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Banos"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mcocha"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Cocina"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mcochl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Cocina"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mpiletaa"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Pileta"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mpiletal"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Pileta"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mquinchoa"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Quincho"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="mquinchol"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Quincho"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="msemicubiertoa"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="A=Semicubierto"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="msemicubiertol"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      className="mt-2 p-2 border rounded "
-                      placeholder="L=Semicubierto"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <span className="flex flex-col text-xs items-center">
+              Living
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mlivinga"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          value={field.value || ""}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mlivingl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Comedor
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mcomedora"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mcomedorl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Cocina
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mcocinaa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mcocinal"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Dormitorio 1
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mdorm1a"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mdorm1l"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Dormitorio 2
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mdorm2a"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mdorm2l"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Dormitorio 3
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mdorm3a"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mdorm3l"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Dormitorio 4
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mdorm4a"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mdorm4l"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Lavadero
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mlava"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mlavl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Hall
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mhalla"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mhalll"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Baños
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mbanosa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mbanosl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Cochera
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mcocha"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mcochl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Pileta
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mpiletaa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mpiletal"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Quincho
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="mquinchoa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mquinchol"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Semicubiertos
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="msemicubiertoa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="msemicubiertol"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
           </div>
           {<span>Superficie total: {totalArea} m2</span>}
           <div>
