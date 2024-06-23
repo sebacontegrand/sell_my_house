@@ -30,34 +30,34 @@ export const addForm = async(prelistingId: string,date: Date,email:string,asesor
     }
 }
 
-export const updateForm = async (prelistingId: string, updatedData: Partial<Form>): Promise<Form> => {
+// export const updateForm = async (prelistingId: string, updatedData: Partial<Form>): Promise<Form> => {
  
-    const form = await prisma.form.findFirst({ where: { prelistingId } });
+//     const form = await prisma.form.findFirst({ where: { prelistingId } });
     
-    if (!form) {
-        throw new Error(`Todo with id ${prelistingId} not found`);
-    }
+//     if (!form) {
+//         throw new Error(`Todo with id ${prelistingId} not found`);
+//     }
 
     
-    const dataToUpdate: Prisma.FormUpdateInput = {};
-    for (const key in updatedData) {
-        if (updatedData[key as keyof Form] !== form[key as keyof Form]) {
-            dataToUpdate[key as keyof Prisma.FormUpdateInput] = updatedData[key as keyof Form]!;
-        }
-    }
-//const rawFromData=Object.fromEntries(formData.entries())
-    if (Object.keys(dataToUpdate).length === 0) {
-        throw new Error('No changes detected in the form data');
-    }
-
-   
-    const updatedForm = await prisma.form.update({
-        where: { prelistingId },
-        data: dataToUpdate,
-    });
+//     const dataToUpdate: Prisma.FormUpdateInput = {};
+//     for (const key in updatedData) {
+//         if (updatedData[key as keyof Form] !== form[key as keyof Form]) {
+//             dataToUpdate[key as keyof Prisma.FormUpdateInput] = updatedData[key as keyof Form]!;
+//         }
+//     }
+// //const rawFromData=Object.fromEntries(formData.entries())
+//     if (Object.keys(dataToUpdate).length === 0) {
+//         throw new Error('No changes detected in the form data');
+//     }
 
    
-    revalidatePath('/dashboard/form');
+//     const updatedForm = await prisma.form.update({
+//         where: { prelistingId },
+//         data: dataToUpdate,
+//     });
+
+   
+//     revalidatePath('/dashboard/form');
     
-    return updatedForm;
-};
+//     return updatedForm;
+// };
