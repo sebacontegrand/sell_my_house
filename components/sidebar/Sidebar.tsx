@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import c21 from "../../public/images/c21.png";
+import house from "../../public/images/house.jpg";
 import {
   IoCalendarOutline,
   IoCheckboxOutline,
@@ -52,13 +53,13 @@ const Sidebar = async () => {
       <div>
         <div className="-mx-6 px-6 py-4">
           <Link href="#" title="home">
-            <Image
-              src={c21}
+            {/* <Image
+              src={house}
               className="w-32"
               alt="tailus logo"
               width={150}
               height={150}
-            />
+            /> */}
           </Link>
         </div>
 

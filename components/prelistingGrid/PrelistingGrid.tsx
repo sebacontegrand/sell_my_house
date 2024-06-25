@@ -3,6 +3,7 @@ import { Prelisting } from "@prisma/client";
 import * as api from "@/helpers/prelistings";
 import { useRouter } from "next/navigation";
 import PrelistingItem from "./PrelistingItem";
+
 interface Props {
   prelistings?: Prelisting[];
 }
@@ -21,15 +22,17 @@ const PrelistingGrid = ({ prelistings }: Props) => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 ">
-      {prelistings?.map((prelisting) => (
-        <PrelistingItem
-          key={prelisting.id}
-          prelisting={prelisting}
-          togglePrelisting={togglePrelisting}
-        />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 ">
+        {prelistings?.map((prelisting) => (
+          <PrelistingItem
+            key={prelisting.id}
+            prelisting={prelisting}
+            togglePrelisting={togglePrelisting}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

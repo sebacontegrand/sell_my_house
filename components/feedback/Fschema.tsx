@@ -20,6 +20,7 @@ export const feedBackSchema = z
       "Malo",
       "Muy_malo",
     ]),
+    otrasOpiniones: z.string(),
   })
   .refine((data) => {
     return true;

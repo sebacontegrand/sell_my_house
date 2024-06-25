@@ -88,12 +88,30 @@ model Form {
   mdorm3l Decimal? 
   mdorm4a Decimal? 
   mdorm4l Decimal? 
+  mdorm5a Decimal?
+  mdorm5l Decimal?
   mlava Decimal? 
   mlavl Decimal? 
   mhalla Decimal? 
   mhalll Decimal? 
-  mbanosa Decimal? 
-  mbanosl Decimal? 
+  mbanos1a Decimal? 
+  mbanos1l Decimal?
+  mbanos2a Decimal? 
+  mbanos2l Decimal? 
+  mbanos3a Decimal? 
+  mbanos3l Decimal? 
+  mbanos4a Decimal? 
+  mbanos4l Decimal? 
+  mbanos5a Decimal? 
+  mbanos5l Decimal?
+  mtoilette1a Decimal?
+  mtoilette1l Decimal?
+  mtoilette2a Decimal?
+  mtoilette2l Decimal?
+  mtoilette3a Decimal?
+  mtoilette3l Decimal?
+  mtoilette4a Decimal?
+  mtoilette4l Decimal?
   mcocha Decimal? 
   mcochl Decimal? 
   mpiletaa Decimal? 
@@ -102,7 +120,8 @@ model Form {
   mquinchol Decimal? 
   msemicubiertoa Decimal? 
   msemicubiertol Decimal? 
- 
+ motrosespaciosa Decimal?
+  motrosespaciosl Decimal?
   escritura Boolean?
   plano Boolean?
   finalobra Boolean?
@@ -200,6 +219,7 @@ model FeedBack{
   masgusto String?
   menosgusto String?
   oferta Boolean
+  otrasOpiniones String?
 }
 enum feedEstadoEnum{
   Muy_bueno

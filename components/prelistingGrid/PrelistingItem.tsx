@@ -24,6 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
 interface Props {
   prelisting: Prelisting;
   togglePrelisting: (
@@ -217,6 +218,7 @@ const PrelistingItem = ({ prelisting, togglePrelisting }: Props) => {
             <strong>Operación:</strong> {prelisting.title}
           </div>
         </div>
+
         {loading && (
           <SpinnerDotted
             size={50}

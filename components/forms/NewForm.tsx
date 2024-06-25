@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { createForm } from "../../helpers/forms";
 import { useRouter } from "next/navigation";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, Controller } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import {
@@ -104,8 +104,22 @@ const NewForm = () => {
       mlavl: undefined,
       mhalla: undefined,
       mhalll: undefined,
-      mbanosa: undefined,
-      mbanosl: undefined,
+      mbanos1a: undefined,
+      mbanos1l: undefined,
+      mbanos2a: undefined,
+      mbanos2l: undefined,
+      mbanos3a: undefined,
+      mbanos3l: undefined,
+      mbanos4a: undefined,
+      mbanos4l: undefined,
+      mtoilette1a: undefined,
+      mtoilette1l: undefined,
+      mtoilette2a: undefined,
+      mtoilette2l: undefined,
+      mtoilette3a: undefined,
+      mtoilette3l: undefined,
+      mtoilette4a: undefined,
+      mtoilette4l: undefined,
       mcocha: undefined,
       mcochl: undefined,
       mpiletaa: undefined,
@@ -114,6 +128,8 @@ const NewForm = () => {
       mquinchol: undefined,
       msemicubiertoa: undefined,
       msemicubiertol: undefined,
+      motrosespaciosa: undefined,
+      motrosespaciosl: undefined,
       escritura: false,
       plano: false,
       finalobra: false,
@@ -121,12 +137,25 @@ const NewForm = () => {
     },
   });
   const id = localStorage.getItem("prelistingId");
+  const [dormCount, setDormCount] = useState<number>(0);
+  const [banosCount, setBanosCount] = useState<number>(0);
+  const [toiletteCount, setToiletteCount] = useState<number>(0);
 
   const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
   const handleAlertAction = () => {
     setShowAlert(false);
   };
+  const watchDormitorio = form.watch("dormitorio", 0);
+  const watchBanos = form.watch("banos", 0);
+  const watchToilette = form.watch("toilette", 0);
+
+  useEffect(() => {
+    setDormCount(watchDormitorio || 0);
+    setBanosCount(watchBanos || 0);
+    setToiletteCount(watchToilette || 0);
+  }, [watchDormitorio, watchBanos, watchToilette]);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const prelistingId = id?.toString()!;
 
@@ -956,133 +985,7 @@ const NewForm = () => {
               </FormItem>
             )}
           />
-          <div className="flex flex-row gap-2">
-            <span className="flex flex-col text-xs items-center">
-              Plantas?
-              <FormField
-                control={form.control}
-                name="plantas"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="mt-2 p-2 border rounded "
-                        placeholder="Plantas?"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(parseFloat(e.target.value))
-                        }
-                        type="number"
-                        min="0.0"
-                        step="0.5"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </span>
-            <span className="flex flex-col text-xs items-center">
-              Cocheras?
-              <FormField
-                control={form.control}
-                name="cocheras"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="mt-2 p-2 border rounded "
-                        placeholder="Cocheras?"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(parseFloat(e.target.value))
-                        }
-                        type="number"
-                        min="0.0"
-                        step="0.5"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </span>
-            <span className="flex flex-col text-xs items-center">
-              Baños?
-              <FormField
-                control={form.control}
-                name="banos"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="mt-2 p-1 border rounded "
-                        placeholder="Baños?"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(parseFloat(e.target.value))
-                        }
-                        type="number"
-                        min="0.0"
-                        step="0.5"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </span>
-            <span className="flex flex-col text-xs items-center">
-              Dormitorios?
-              <FormField
-                control={form.control}
-                name="dormitorio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="mt-2 p-1 border rounded text-xs"
-                        placeholder="Dormitorios?"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(parseFloat(e.target.value))
-                        }
-                        type="number"
-                        min="0.0"
-                        step="0.5"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </span>
-            <span className="flex flex-col text-xs items-center">
-              Toilettes?
-              <FormField
-                control={form.control}
-                name="toilette"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="mt-2 p-2 border rounded "
-                        placeholder="Toilettes?"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(parseFloat(e.target.value))
-                        }
-                        type="number"
-                        min="0.0"
-                        step="0.5"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </span>
-          </div>
+
           <div className="flex flex-row items-center p-2 justify-between">
             <span>Dormitorio de servicio?</span>
             <FormField
@@ -1259,6 +1162,133 @@ const NewForm = () => {
               )}
             />
           </div>
+          <div className="flex flex-row gap-2">
+            <span className="flex flex-col text-xs items-center">
+              Plantas?
+              <FormField
+                control={form.control}
+                name="plantas"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-2 border rounded "
+                        placeholder="Pisos?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Cocheras?
+              <FormField
+                control={form.control}
+                name="cocheras"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-2 border rounded "
+                        placeholder="cuantos Autos?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0.0"
+                        step="0.5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Baños?
+              <Controller
+                control={form.control}
+                name="banos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-1 border rounded text-xs"
+                        placeholder="Cantidad?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0"
+                        step="1"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Dormitorios?
+              <Controller
+                control={form.control}
+                name="dormitorio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-1 border rounded text-xs"
+                        placeholder="Cantidad?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0"
+                        step="1"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Toilettes?
+              <Controller
+                control={form.control}
+                name="toilette"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className="mt-2 p-1 border rounded text-xs"
+                        placeholder="Cantidad?"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                        type="number"
+                        min="0"
+                        step="1"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </span>
+          </div>
           <span>Dimensiones: A=Ancho x L=Largo</span>
           <hr />
           <div className="grid grid-cols-4 gap-2">
@@ -1404,194 +1434,133 @@ const NewForm = () => {
                 />
               </div>
             </span>
-            <span className="flex flex-col text-xs items-center">
-              Dormitorio 1
-              <div className="flex flex-row items-center">
-                <FormField
-                  control={form.control}
-                  name="mdorm1a"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="A=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="mdorm1l"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="L=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </span>
-            <span className="flex flex-col text-xs items-center">
-              Dormitorio 2
-              <div className="flex flex-row items-center">
-                <FormField
-                  control={form.control}
-                  name="mdorm2a"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="A=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="mdorm2l"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="L=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </span>
-            <span className="flex flex-col text-xs items-center">
-              Dormitorio 3
-              <div className="flex flex-row items-center">
-                <FormField
-                  control={form.control}
-                  name="mdorm3a"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="A=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="mdorm3l"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="L=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </span>
-            <span className="flex flex-col text-xs items-center">
-              Dormitorio 4
-              <div className="flex flex-row items-center">
-                <FormField
-                  control={form.control}
-                  name="mdorm4a"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="A=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="mdorm4l"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="L=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </span>
+
+            {Array.from({ length: dormCount }, (_, index) => (
+              <span
+                className="flex flex-col text-xs items-center"
+                key={`dorm-${index + 1}`}
+              >
+                <label>{`Dormitorio ${index + 1}`}</label>
+                <div className="flex flex-row items-center">
+                  <Controller
+                    name={`mdorm${index + 1}a` as string}
+                    defaultValue={0}
+                    render={({ field }) => (
+                      <input
+                        className="mt-2 p-2 border rounded w-1/2"
+                        {...field}
+                        type="number"
+                        step="0.5"
+                        placeholder="A=?"
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`mdorm${index + 1}l` as string}
+                    defaultValue={0}
+                    render={({ field }) => (
+                      <input
+                        className="mt-2 p-2 border rounded w-1/2"
+                        {...field}
+                        type="number"
+                        step="0.5"
+                        placeholder="L=?"
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                      />
+                    )}
+                  />
+                </div>
+              </span>
+            ))}
+            {Array.from({ length: banosCount }, (_, index) => (
+              <span
+                className="flex flex-col text-xs items-center"
+                key={`banos-${index + 1}`}
+              >
+                <label>{`Baños ${index + 1}`}</label>
+                <div className="flex flex-row items-center">
+                  <Controller
+                    name={`mbanos${index + 1}a` as string}
+                    defaultValue={0}
+                    render={({ field }) => (
+                      <input
+                        className="mt-2 p-2 border rounded w-1/2"
+                        {...field}
+                        type="number"
+                        step="0.5"
+                        placeholder="A=?"
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`mbanos${index + 1}l` as string}
+                    defaultValue={0}
+                    render={({ field }) => (
+                      <input
+                        className="mt-2 p-2 border rounded w-1/2"
+                        {...field}
+                        type="number"
+                        step="0.5"
+                        placeholder="L=?"
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                      />
+                    )}
+                  />
+                </div>
+              </span>
+            ))}
+            {Array.from({ length: toiletteCount }, (_, index) => (
+              <span
+                className="flex flex-col text-xs items-center"
+                key={`toilette-${index + 1}`}
+              >
+                <label>{`Toilette ${index + 1}`}</label>
+                <div className="flex flex-row items-center">
+                  <Controller
+                    name={`mtoilette${index + 1}a` as string}
+                    defaultValue={0}
+                    render={({ field }) => (
+                      <input
+                        className="mt-2 p-2 border rounded w-1/2"
+                        {...field}
+                        type="number"
+                        step="0.5"
+                        placeholder="A=?"
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`mtoilette${index + 1}l` as string}
+                    defaultValue={0}
+                    render={({ field }) => (
+                      <input
+                        className="mt-2 p-2 border rounded w-1/2"
+                        {...field}
+                        type="number"
+                        step="0.5"
+                        placeholder="L=?"
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                      />
+                    )}
+                  />
+                </div>
+              </span>
+            ))}
             <span className="flex flex-col text-xs items-center">
               Lavadero
               <div className="flex flex-row items-center">
@@ -1686,53 +1655,7 @@ const NewForm = () => {
                 />
               </div>
             </span>
-            <span className="flex flex-col text-xs items-center">
-              Baños
-              <div className="flex flex-row items-center">
-                <FormField
-                  control={form.control}
-                  name="mbanosa"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="A=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="mbanosl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className="mt-2 p-2 border rounded "
-                          placeholder="L=?"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                          type="number"
-                          step="0.5"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </span>
+
             <span className="flex flex-col text-xs items-center">
               Cochera
               <div className="flex flex-row items-center">
@@ -1901,6 +1824,53 @@ const NewForm = () => {
                 <FormField
                   control={form.control}
                   name="msemicubiertol"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="L=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </span>
+            <span className="flex flex-col text-xs items-center">
+              Otros Espacios
+              <div className="flex flex-row items-center">
+                <FormField
+                  control={form.control}
+                  name="motrosespaciosa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="mt-2 p-2 border rounded "
+                          placeholder="A=?"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                          type="number"
+                          step="0.5"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="motrosespaciosl"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>

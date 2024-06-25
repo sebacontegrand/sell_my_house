@@ -41,8 +41,8 @@ export const fetchFeedBack = async (id: string) => {
         return data.form;
       };
 
-export const updateFeedBack=async(prelistingId: string, date:Date,asesorCaptador:string,asesorVendedor:string,masgusto:string,menosgusto:string,oferta:boolean,valoracion:string,feedEstado:string,feedInmueble:string,feedUbicacion:string):Promise<FeedBack>=>{
-        const body={prelistingId,date,asesorCaptador,asesorVendedor,masgusto,menosgusto,oferta,valoracion,feedEstado,feedInmueble,feedUbicacion}
+export const updateFeedBack=async(prelistingId: string, date:Date,asesorCaptador:string,asesorVendedor:string,masgusto:string,menosgusto:string,oferta:boolean,valoracion:string,feedEstado:string,feedInmueble:string,feedUbicacion:string,otrasOpiniones:string):Promise<FeedBack>=>{
+        const body={prelistingId,date,asesorCaptador,asesorVendedor,masgusto,menosgusto,oferta,valoracion,feedEstado,feedInmueble,feedUbicacion,otrasOpiniones}
     
         const feedBackDb= await fetch(`/api/feedback/${prelistingId}`,{
             method:'PUT',

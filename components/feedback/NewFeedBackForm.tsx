@@ -63,6 +63,7 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
       feedEstado: feedEstadoEnum.Malo,
       feedInmueble: feedInmuebleEnum.Malo,
       feedUbicacion: feedubicacionEnum.Malo,
+      otrasOpiniones: "",
     },
   });
   const id = localStorage.getItem("feedBackId");
@@ -91,7 +92,8 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
         transformedValues.valoracion,
         transformedValues.feedEstado,
         transformedValues.feedInmueble,
-        transformedValues.feedUbicacion
+        transformedValues.feedUbicacion,
+        transformedValues.otrasOpiniones
       );
       setShowAlert(true);
       router.push("/dashboard/feedback");
@@ -304,6 +306,21 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={feedback.control}
+            name="otrasOpiniones"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-xl">
+                  Comentarios adicionales
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Otras Opiniones" {...field} />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />

@@ -71,6 +71,7 @@ const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
       feedEstado: feedEstadoEnum.Malo,
       feedInmueble: feedInmuebleEnum.Malo,
       feedUbicacion: feedubicacionEnum.Malo,
+      otrasOpiniones: "",
     },
   });
 
@@ -341,6 +342,25 @@ const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={updateFeedBack.control}
+            name="otrasOpiniones"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-xl">
+                  Comentarios adicionales
+                </FormLabel>
+                <FormControl>
+                  <textarea
+                    className="align-top h-40 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                    placeholder="Otras Opiniones"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />

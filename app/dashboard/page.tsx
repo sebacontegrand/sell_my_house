@@ -27,7 +27,7 @@ const DashBoardPage = () => {
           FeedBack a Clientes
         </Link>
       </div>
-      <Image src={c21} alt={""} />
+      <Image src={house} alt={""} />
     </div>
   );
 };
