@@ -61,7 +61,7 @@ const MeliSearch = () => {
           meliData.comentarios;
 
         const response = await fetch(
-          `https://api.mercadolibre.com/sites/MLA/search?category=MLA1459&q=${meliQuery}&lat=40.7128&lng=-74.0059&page=1&sort=price&facets=&filters=&limit=10`
+          `https://api.mercadolibre.com/sites/MLA/search?category=MLA1459&q=${meliQuery}&filters=&limit=10`
         );
 
         if (!response.ok) {
