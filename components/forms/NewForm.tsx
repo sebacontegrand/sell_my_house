@@ -1181,7 +1181,7 @@ const NewForm = () => {
                         }
                         type="number"
                         min="0.0"
-                        step="0.5"
+                        step="0.1"
                       />
                     </FormControl>
                     <FormMessage />
@@ -1206,7 +1206,7 @@ const NewForm = () => {
                         }
                         type="number"
                         min="0.0"
-                        step="0.5"
+                        step="0.1"
                       />
                     </FormControl>
                     <FormMessage />
@@ -1311,7 +1311,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1332,7 +1332,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1358,7 +1358,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1379,7 +1379,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1405,7 +1405,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1426,7 +1426,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1451,7 +1451,7 @@ const NewForm = () => {
                         className="mt-2 p-2 border rounded w-1/2"
                         {...field}
                         type="number"
-                        step="0.5"
+                        step="0.1"
                         placeholder="A=?"
                         onChange={(e) =>
                           field.onChange(parseFloat(e.target.value))
@@ -1467,7 +1467,7 @@ const NewForm = () => {
                         className="mt-2 p-2 border rounded w-1/2"
                         {...field}
                         type="number"
-                        step="0.5"
+                        step="0.1"
                         placeholder="L=?"
                         onChange={(e) =>
                           field.onChange(parseFloat(e.target.value))
@@ -1493,7 +1493,7 @@ const NewForm = () => {
                         className="mt-2 p-2 border rounded w-1/2"
                         {...field}
                         type="number"
-                        step="0.5"
+                        step="0.1"
                         placeholder="A=?"
                         onChange={(e) =>
                           field.onChange(parseFloat(e.target.value))
@@ -1509,7 +1509,7 @@ const NewForm = () => {
                         className="mt-2 p-2 border rounded w-1/2"
                         {...field}
                         type="number"
-                        step="0.5"
+                        step="0.1"
                         placeholder="L=?"
                         onChange={(e) =>
                           field.onChange(parseFloat(e.target.value))
@@ -1535,7 +1535,7 @@ const NewForm = () => {
                         className="mt-2 p-2 border rounded w-1/2"
                         {...field}
                         type="number"
-                        step="0.5"
+                        step="0.1"
                         placeholder="A=?"
                         onChange={(e) =>
                           field.onChange(parseFloat(e.target.value))
@@ -1551,7 +1551,7 @@ const NewForm = () => {
                         className="mt-2 p-2 border rounded w-1/2"
                         {...field}
                         type="number"
-                        step="0.5"
+                        step="0.1"
                         placeholder="L=?"
                         onChange={(e) =>
                           field.onChange(parseFloat(e.target.value))
@@ -1579,7 +1579,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1600,7 +1600,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1626,7 +1626,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1647,7 +1647,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1674,7 +1674,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1695,7 +1695,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1721,7 +1721,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1742,7 +1742,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1768,7 +1768,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1789,7 +1789,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1815,7 +1815,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1836,7 +1836,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1862,7 +1862,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1883,7 +1883,7 @@ const NewForm = () => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />

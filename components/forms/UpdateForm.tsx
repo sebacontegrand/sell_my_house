@@ -212,17 +212,22 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
       ]);
 
       let total = 0;
+      const parseNumber = (value: any) => {
+        const number = parseFloat(value);
+
+        return isNaN(number) ? 0 : number;
+      };
       if (fields[fields.length - 1] !== undefined) {
         for (let i = 0; i < fields.length; i += 2) {
-          let length = fields[i]!;
-          let width = fields[i + 1]!;
-          if (i === fields.length - 4) {
-            length /= 2;
-            width /= 2;
+          let length = parseNumber(fields[i]!);
+          let width = parseNumber(fields[i + 1]!);
+          if (
+            fields[i] === fields[fields.length - 4] &&
+            fields[i + 1] === fields[fields.length - 3]
+          ) {
+            (length * width) / 2;
           }
           total += length * width;
-
-          console.log("%c Line:201 🥔 total", "color:#6ec1c2", total);
         }
       }
 
@@ -233,9 +238,17 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
     return () => subscription.unsubscribe();
   }, [form]);
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
-      if (id) {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+
+      try {
         const data = await fetchForm(id as string);
+
         const formatDateString = (dateString: string | undefined) => {
           if (!dateString) return new Date().toISOString().split("T")[0];
           const date = new Date(dateString);
@@ -243,9 +256,16 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
             ? new Date().toISOString().split("T")[0]
             : date.toISOString().split("T")[0];
         };
-        const getSafeValue = (field: { d: any[] }) => {
-          return field?.d?.[0] ?? 0;
+
+        const getSafeValue = (field: { d?: string[] }): number => {
+          if (!field || !Array.isArray(field.d) || field.d.length === 0) {
+            return 0;
+          }
+          const value = parseFloat(field.d[0]);
+
+          return isNaN(value) ? 0 : value;
         };
+
         const formattedData = {
           ...data,
           date: formatDateString(data?.date),
@@ -301,18 +321,31 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
           motrosespaciosa: getSafeValue(data?.motrosespaciosa),
           motrosespaciosl: getSafeValue(data?.motrosespaciosl),
         };
-        console.log(
-          "%c Line:202 🧀 formattedData",
-          "color:#465975",
-          formattedData
-        );
 
-        form.reset(formattedData);
+        if (isMounted) {
+          console.log(
+            "%c Line:256 🍔 formattedData",
+            "color:#b03734",
+            formattedData
+          );
+          form.reset(formattedData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
-      setLoading(false);
     };
+
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id, form]);
+
   const [solveBeforeSell, setSolveBeforeSell] = useState<string>(
     form.getValues("solvebeforesell")
   );
@@ -952,7 +985,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                         }
                         type="number"
                         min="0.0"
-                        step="0.5"
+                        step="0.1"
                       />
                     </FormControl>
                     <FormMessage />
@@ -977,7 +1010,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                         }
                         type="number"
                         min="0.0"
-                        step="0.5"
+                        step="0.1"
                       />
                     </FormControl>
                     <FormMessage />
@@ -1019,7 +1052,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                         }
                         type="number"
                         min="0.0"
-                        step="0.5"
+                        step="0.1"
                       />
                     </FormControl>
                     <FormMessage />
@@ -1044,7 +1077,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                         }
                         type="number"
                         min="0.0"
-                        step="0.5"
+                        step="0.1"
                       />
                     </FormControl>
                     <FormMessage />
@@ -1248,6 +1281,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                       <SelectItem value="Altonivel">Alto nivel</SelectItem>
                       <SelectItem value="excelente">Excelente</SelectItem>
                       <SelectItem value="muybueno">Muy Bueno</SelectItem>
+                      <SelectItem value="bueno">Bueno</SelectItem>
                       <SelectItem value="regular">Regular</SelectItem>
                     </SelectGroup>
                   </SelectContent>
@@ -1336,7 +1370,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                         }
                         type="number"
                         min="0.0"
-                        step="0.5"
+                        step="0.1"
                       />
                     </FormControl>
                     <FormMessage />
@@ -1361,7 +1395,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                         }
                         type="number"
                         min="0.0"
-                        step="0.5"
+                        step="0.1"
                       />
                     </FormControl>
                     <FormMessage />
@@ -1466,7 +1500,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1487,7 +1521,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1513,7 +1547,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1534,7 +1568,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1560,7 +1594,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1581,7 +1615,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1608,7 +1642,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1629,7 +1663,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1657,7 +1691,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1678,7 +1712,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1706,7 +1740,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1727,7 +1761,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1755,7 +1789,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1776,7 +1810,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1804,7 +1838,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1825,7 +1859,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1853,7 +1887,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1874,7 +1908,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1902,7 +1936,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1923,7 +1957,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1951,7 +1985,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -1972,7 +2006,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2000,7 +2034,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2021,7 +2055,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2049,7 +2083,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2070,7 +2104,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2099,7 +2133,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2120,7 +2154,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2149,7 +2183,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2170,7 +2204,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2199,7 +2233,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2220,7 +2254,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2249,7 +2283,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2270,7 +2304,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2297,7 +2331,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2318,7 +2352,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2344,7 +2378,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2365,7 +2399,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2392,7 +2426,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2413,7 +2447,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2439,7 +2473,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2460,7 +2494,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2486,7 +2520,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2507,7 +2541,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2533,7 +2567,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2554,7 +2588,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                             field.onChange(parseFloat(e.target.value))
                           }
                           type="number"
-                          step="0.5"
+                          step="0.1"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2582,7 +2616,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2603,7 +2637,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
                               field.onChange(parseFloat(e.target.value))
                             }
                             type="number"
-                            step="0.5"
+                            step="0.1"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2614,7 +2648,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
               </span>
             ) : null}
           </div>
-          {<span>Superficie total: {totalArea} m2</span>}
+          {<span>Superficie total: {totalArea.toFixed(2)} m2</span>}
           <div>
             <span>Comentarios adicionales:</span>
             <FormField
