@@ -158,3 +158,11 @@ export const formSchema = z
   .refine((data) => {
     return true;
   });
+const validateEmailExists = async (email: string): Promise<boolean> => {
+  // Replace this with actual API call or database query
+  const response = await fetch(
+    `/api/check-email?email=${encodeURIComponent(email)}`
+  );
+  const result = await response.json();
+  return result.exists;
+};

@@ -95,7 +95,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
       baulera: false,
       cantascensores: 0,
       categoria: "Altonivel",
-      mlivinga: 0,
+      mlivinga: 0.0,
       mlivingl: 0,
       mcomedora: 0,
       mcomedorl: 0,
@@ -256,14 +256,19 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
             ? new Date().toISOString().split("T")[0]
             : date.toISOString().split("T")[0];
         };
-
         const getSafeValue = (field: { d?: string[] }): number => {
-          if (!field || !Array.isArray(field.d) || field.d.length === 0) {
+          if (!field || !Array.isArray(field.d) || field.d.length < 2) {
             return 0;
           }
-          const value = parseFloat(field.d[0]);
 
-          return isNaN(value) ? 0 : value;
+          const integerPart = field.d[0] || "0";
+          const fractionalPart = field.d[1] || "0";
+
+          const valueString = `${integerPart}.${fractionalPart}`;
+
+          const value = parseFloat(valueString);
+
+          return isNaN(value) ? 0 : parseFloat(value.toFixed(2)); // Format to 2 decimal places
         };
 
         const formattedData = {
