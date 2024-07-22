@@ -80,6 +80,7 @@ export const formSchema = z
     heattype: z.enum([
       "losaradiante",
       "radiadores",
+      "calefactores",
       "splitfc",
       "central",
       "sin",
@@ -93,7 +94,13 @@ export const formSchema = z
     amenities: z.boolean(),
     baulera: z.boolean(),
     cantascensores: z.number().optional(),
-    categoria: z.enum(["Altonivel", "excelente", "muybueno", "regular"]),
+    categoria: z.enum([
+      "Altonivel",
+      "excelente",
+      "muybueno",
+      "bueno",
+      "regular",
+    ]),
     mlivinga: z.number().nonnegative(),
     mlivingl: z.number().nonnegative(),
     mcomedora: z.number().nonnegative(),
