@@ -127,7 +127,19 @@ const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
     setShowAlert(true);
     updateFeedBack.reset();
   };
+  const handleSendEmail = async () => {
+    const values = updateFeedBack.getValues();
 
+    const res = await fetch("/api/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, ...values }),
+    });
+
+    const data = await res.json();
+  };
   if (loading)
     return (
       <SpinnerDotted
@@ -370,6 +382,9 @@ const UpdateFeedBackForm: React.FC<UpdateFeedBackFormProps> = ({ id }) => {
             </Button>
             <Button className="p-2 m-2" onClick={handlePrint}>
               Imprimir
+            </Button>
+            <Button className="p-2 m-2" onClick={handleSendEmail}>
+              Email al Proprietario
             </Button>
           </div>
         </form>

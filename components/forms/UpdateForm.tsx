@@ -214,7 +214,14 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
       let total = 0;
       if (fields[fields.length - 1] !== undefined) {
         for (let i = 0; i < fields.length; i += 2) {
-          total += fields[i]! * fields[i + 1]!;
+          let length = fields[i]!;
+          let width = fields[i + 1]!;
+          if (i === fields.length - 4) {
+            length /= 2;
+            width /= 2;
+          }
+          total += length * width;
+
           console.log("%c Line:201 🥔 total", "color:#6ec1c2", total);
         }
       }

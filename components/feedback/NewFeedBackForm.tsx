@@ -318,7 +318,11 @@ const NewFeedBackForm: React.FC<NewFeedBackFormProps> = ({ feedBackId }) => {
                   Comentarios adicionales
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Otras Opiniones" {...field} />
+                  <textarea
+                    className="align-top h-40 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                    placeholder="Otras Opiniones"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

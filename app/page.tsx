@@ -1,5 +1,5 @@
 "use server";
-
+import { EmailTemplate } from "../components/emails/FeedBackEmails";
 import { auth } from "@/auth";
 import WidgetItem from "@/components/widgetItem/WidgetItem";
 import { redirect } from "next/navigation";

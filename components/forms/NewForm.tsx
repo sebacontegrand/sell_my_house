@@ -1092,6 +1092,7 @@ const NewForm = () => {
                       <SelectItem value="Altonivel">Alto nivel</SelectItem>
                       <SelectItem value="excelente">Excelente</SelectItem>
                       <SelectItem value="muybueno">Muy Bueno</SelectItem>
+                      <SelectItem value="bueno">Bueno</SelectItem>
                       <SelectItem value="regular">Regular</SelectItem>
                     </SelectGroup>
                   </SelectContent>

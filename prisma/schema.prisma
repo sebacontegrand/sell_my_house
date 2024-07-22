@@ -131,6 +131,7 @@ enum catEnum{
   Altonivel
   excelente
   muybueno
+  bueno
   regular
 }
 enum heatEnum{
@@ -138,6 +139,7 @@ enum heatEnum{
   radiadores
   splitfc
   central
+  calefactores
   sin
 }
 enum estadoEnum{
