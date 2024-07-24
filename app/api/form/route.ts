@@ -152,6 +152,12 @@ export async function POST(request:Request){
         if (existingForm) {
           return NextResponse.json({ error: 'A form with this prelistingId already exists.' }, { status: 400 });
         }
+        const existingEmail = await prisma.form.findFirst({
+          where: { email: validatedData.email },
+        });
+        if (existingEmail) {
+          return NextResponse.json({ error: 'Email already exists' }, { status: 401 });
+        }
     
         const form = await prisma.form.create({ data: validatedData });
     

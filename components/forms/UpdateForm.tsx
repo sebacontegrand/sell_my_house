@@ -212,20 +212,31 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ id }) => {
       ]);
 
       let total = 0;
-      const parseNumber = (value: any) => {
-        const number = parseFloat(value);
 
-        return isNaN(number) ? 0 : number;
-      };
       if (fields[fields.length - 1] !== undefined) {
         for (let i = 0; i < fields.length; i += 2) {
-          let length = parseNumber(fields[i]!);
-          let width = parseNumber(fields[i + 1]!);
-          if (
-            fields[i] === fields[fields.length - 4] &&
-            fields[i + 1] === fields[fields.length - 3]
-          ) {
-            (length * width) / 2;
+          let length = fields[i]!;
+          let width = fields[i + 1]!;
+          let area = length * width;
+          if (i === fields.length - 4 && i + 1 === fields.length - 3) {
+            area /= 2;
+
+            console.log("%c Line:229 🥪 length*width", "color:#465975", area);
+          }
+          total += area;
+        }
+      } else {
+        for (let i = 0; i < fields.length; i += 2) {
+          let length = fields[i]!;
+          let width = fields[i + 1]!;
+          if (i === fields.length - 3 && i + 1 === fields.length - 2) {
+            length / 2;
+            width / 2;
+            console.log(
+              "%c Line:229 🥪 length*width",
+              "color:#465975",
+              length * width
+            );
           }
           total += length * width;
         }

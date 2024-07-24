@@ -140,7 +140,7 @@ const NewForm = () => {
   const [dormCount, setDormCount] = useState<number>(0);
   const [banosCount, setBanosCount] = useState<number>(0);
   const [toiletteCount, setToiletteCount] = useState<number>(0);
-
+  const { setError, clearErrors } = form;
   const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
   const handleAlertAction = () => {
@@ -182,6 +182,9 @@ const NewForm = () => {
       router.push("/dashboard/form");
     } catch (error) {
       if (error instanceof Error) {
+        if (error.message === "Email already exists") {
+          alert("Email ya existe en la base de datos");
+        }
         console.error("Error occurred:", error.message);
       } else {
         console.error("Unknown error occurred:", error);
@@ -294,7 +297,11 @@ const NewForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="email" type="email" {...field} />
+                  <Input
+                    placeholder="email proprietario"
+                    type="email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
