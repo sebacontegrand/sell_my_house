@@ -1,4 +1,5 @@
 import React from 'react';
+export const dynamic = 'force-dynamic';
 import EditForm from '@/components/forms/EditForm';
 
 interface Props {
