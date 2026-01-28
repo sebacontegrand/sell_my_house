@@ -21,7 +21,7 @@ const PropriedadPage = async () => {
     orderBy: { description: "asc" },
   });
 
-  const prelistings = dbPrelistings.map((item) => ({
+  const prelistings = dbPrelistings.map((item: typeof dbPrelistings[0]) => ({
     ...item,
     createdAt: item.createdAt.toString(),
     updatedAt: item.updatedAt.toString(),

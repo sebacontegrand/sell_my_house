@@ -28,7 +28,7 @@ const Form = async () => {
       id: true,
     },
   });
-  const prelistingIds = prelistings.map((prelisting) => prelisting.id);
+  const prelistingIds = prelistings.map((prelisting: typeof prelistings[0]) => prelisting.id);
   const forms = await prisma.form?.findMany({
     where: { prelistingId: { in: prelistingIds } },
     orderBy: { date: "asc" },
@@ -39,7 +39,7 @@ const Form = async () => {
       asesor: true,
     },
   });
-  const typedForms = forms.map((form) => ({
+  const typedForms = forms.map((form: typeof forms[0]) => ({
     ...form,
     typeoperation: form.typeoperation as typeEnum, // Ensure typeoperation is cast to typeEnum
   }));

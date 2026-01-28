@@ -25,7 +25,7 @@ const FeedBackPage = async ({ searchParams }: PageProps) => {
 
   const totalFeedbacks = feedbacks.length;
   const averageRating = totalFeedbacks > 0
-    ? (feedbacks.reduce((acc, curr) => acc + (curr.rating || 0), 0) / feedbacks.filter(f => f.rating).length || 1).toFixed(1)
+    ? (feedbacks.reduce((acc: number, curr: typeof feedbacks[0]) => acc + (curr.rating || 0), 0) / feedbacks.filter((f: typeof feedbacks[0]) => f.rating).length || 1).toFixed(1)
     : "0.0";
 
   return (
@@ -70,7 +70,7 @@ const FeedBackPage = async ({ searchParams }: PageProps) => {
           {feedbacks.length === 0 ? (
             <p className="text-gray-500 italic">No hay feedback registrado aún.</p>
           ) : (
-            feedbacks.map((item) => (
+            feedbacks.map((item: typeof feedbacks[0]) => (
               <div key={item.id} className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-start mb-2">
                   <div>
