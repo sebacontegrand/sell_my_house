@@ -3,7 +3,6 @@ export const dynamic = 'force-dynamic';
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import NextAuth, { DefaultSession } from "next-auth"
 import authConfig from "./auth.config"
-import prisma from "@/lib/prisma"
 
 declare module "next-auth" {
   interface Session {
@@ -14,8 +13,16 @@ declare module "next-auth" {
   }
 }
 
+// Lazy load prisma only when NOT building
+const getPrisma = () => {
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return null;
+  }
+  return require('@/lib/prisma').default;
+};
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: process.env.NEXT_PHASE === 'phase-production-build' ? undefined : PrismaAdapter(prisma),
+  adapter: process.env.NEXT_PHASE === 'phase-production-build' ? undefined : PrismaAdapter(getPrisma()!),
   session: { strategy: "jwt" },
   callbacks: {
     async jwt({ token, user }) {
@@ -27,6 +34,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (process.env.NEXT_PHASE === 'phase-production-build') {
         return token;
       }
+
+      const prisma = getPrisma();
+      if (!prisma) return token;
 
       const dbUser = await prisma.user.findUnique({ where: { email: token.email ?? 'mo-email' } })
       token.roles = dbUser?.roles ?? ['no-roles']
