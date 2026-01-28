@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import * as yup from 'yup';
+import { sendFeedbackNotification } from "@/lib/email";
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +32,32 @@ export async function POST(request: Request) {
                 impression: validatedData.impression,
                 rating: validatedData.rating || null,
             },
+            include: {
+                prelisting: {
+                    select: {
+                        title: true,
+                        form: {
+                            select: {
+                                email: true,
+                            }
+                        }
+                    }
+                }
+            }
         });
+
+        // Send email notifications
+        if (feedback.prelisting.form?.email || session.user.email) {
+            await sendFeedbackNotification({
+                propertyTitle: feedback.prelisting.title,
+                visitorName: feedback.visitorName,
+                visitorContact: feedback.visitorContact,
+                impression: feedback.impression,
+                rating: feedback.rating,
+                propertyOwnerEmail: feedback.prelisting.form?.email || '',
+                asesorEmail: session.user.email || '',
+            });
+        }
 
         return NextResponse.json(feedback);
     } catch (error) {
