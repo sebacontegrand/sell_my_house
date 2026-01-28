@@ -6,7 +6,7 @@ export const metadata = {
   description: "SEO Title",
 };
 
-export const Cookiespage = () => {
+const Cookiespage = () => {
   const cookieStore = cookies();
   const cookieTab = cookieStore.get("selectedTab")?.value ?? "1";
 
