@@ -5,6 +5,8 @@ import prisma from "../../../lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: "Listados de forms",
   description: "SEO title",

@@ -6,6 +6,8 @@ import PrelistingGrid from "@/components/prelistingGrid/PrelistingGrid";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: "Propriedades",
   description: "Gestión de propiedades",

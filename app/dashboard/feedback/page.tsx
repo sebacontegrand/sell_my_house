@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import FeedbackFilter from "@/components/feedback/FeedbackFilter";
 // ... imports
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
