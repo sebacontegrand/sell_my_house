@@ -23,6 +23,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id
 
       }
+      // Skip database queries during build time
+      if (process.env.NEXT_PHASE === 'phase-production-build') {
+        return token;
+      }
+
       const dbUser = await prisma.user.findUnique({ where: { email: token.email ?? 'mo-email' } })
       token.roles = dbUser?.roles ?? ['no-roles']
       token.id = dbUser?.id ?? 'no=uuid'
