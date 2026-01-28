@@ -2,14 +2,6 @@ export const dynamic = 'force-dynamic';
 
 import { Resend } from 'resend';
 
-// Lazy load Resend to avoid build-time initialization
-const getResend = () => {
-    if (process.env.NEXT_PHASE === 'phase-production-build') {
-        return null;
-    }
-    return new Resend(process.env.RESEND_API_KEY);
-};
-
 interface FeedbackEmailData {
     propertyTitle: string;
     visitorName: string | null;
@@ -21,16 +13,13 @@ interface FeedbackEmailData {
 }
 
 export async function sendFeedbackNotification(data: FeedbackEmailData) {
-    // Skip during build
-    if (process.env.NEXT_PHASE === 'phase-production-build') {
+    // Check if Resend API key is configured
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('RESEND_API_KEY not configured, skipping email notification');
         return;
     }
 
-    const resend = getResend();
-    if (!resend) {
-        console.warn('Resend not configured, skipping email notification');
-        return;
-    }
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const {
         propertyTitle,
