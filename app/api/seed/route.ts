@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from 'uuid';
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
 
   await prisma.prelisting.deleteMany()
