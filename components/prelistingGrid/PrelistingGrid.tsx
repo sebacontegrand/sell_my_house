@@ -4,19 +4,16 @@ import * as api from "@/helpers/prelistings";
 import { useRouter } from "next/navigation";
 import PrelistingItem from "./PrelistingItem";
 interface Props {
-  prelistings?: Prelisting[];
+  prelistings?: (Omit<Prelisting, "createdAt" | "updatedAt"> & {
+    createdAt: string;
+    updatedAt: string;
+  })[];
 }
 const PrelistingGrid = ({ prelistings }: Props) => {
   console.log("%c Line:10 🍒 prelistings", "color:#b03734", prelistings);
   const router = useRouter();
-  const togglePrelisting = async (id: string, complete: boolean) => {
-    const updatedPrelisting = await api.updatePrelisting(id, complete);
-    console.log(
-      "%c Line:13 🍋 updatedPrelisting",
-      "color:#2eafb0",
-      updatedPrelisting
-    );
-
+  const deletePrelisting = async (id: string) => {
+    await api.deletePrelisting(id);
     router.refresh();
   };
 
@@ -26,7 +23,7 @@ const PrelistingGrid = ({ prelistings }: Props) => {
         <PrelistingItem
           key={prelisting.id}
           prelisting={prelisting}
-          togglePrelisting={togglePrelisting}
+          onDelete={deletePrelisting}
         />
       ))}
     </div>

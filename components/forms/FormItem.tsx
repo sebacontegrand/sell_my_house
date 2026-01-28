@@ -14,9 +14,9 @@ enum typeEnum {
 }
 interface FormItemProps {
   id: string;
-  proprietario: string;
+  proprietario: string | null;
   typeoperation: typeEnum | null;
-  asesor: string;
+  asesor: string | null;
 }
 
 const FormItem: React.FC<FormItemProps> = ({
@@ -30,9 +30,8 @@ const FormItem: React.FC<FormItemProps> = ({
       <div className={!asesor ? styles.formDone : styles.formPending}>
         <div className="flex flex-col sm:flex-row justify-start items-center gap-4">
           <div
-            className={`flex p-2 rounded-md cursor-pointer hover:bg-opacity-60 ${
-              id === "" ? "bg-blue-100" : "bg-red-100"
-            }`}
+            className={`flex p-2 rounded-md cursor-pointer hover:bg-opacity-60 ${id === "" ? "bg-blue-100" : "bg-red-100"
+              }`}
           >
             {asesor ? (
               <IoCheckboxOutline size={30} />

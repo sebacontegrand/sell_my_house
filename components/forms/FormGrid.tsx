@@ -14,9 +14,9 @@ enum typeEnum {
 
 interface Form {
   id: string;
-  proprietario: string;
+  proprietario: string | null;
   typeoperation: typeEnum | null;
-  asesor: string;
+  asesor: string | null;
 }
 
 interface Props {

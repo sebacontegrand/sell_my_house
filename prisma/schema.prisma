@@ -23,16 +23,28 @@ model Prelisting {
   updatedAt DateTime @updatedAt
   user User @relation(fields:[userId],references:[id])
   userId String
+  feedback Feedback[]
+}
+
+model Feedback {
+  id String @id @default(uuid())
+  prelistingId String
+  prelisting Prelisting @relation(fields:[prelistingId],references:[id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  visitorName String?
+  visitorContact String?
+  impression String
+  rating Int? // Optional 1-5 rating if needed
 }
 model Form {
   id String @id @default(uuid())
   prelistingId String @unique
-  prelisting Prelisting @relation(fields:[prelistingId],references:[id])
+  prelisting Prelisting @relation(fields:[prelistingId],references:[id], onDelete: Cascade)
   date DateTime @default(now())
-  asesor String
-  proprietario String
-  email String @unique
-  celular BigInt
+  asesor String?
+  proprietario String?
+  email String?
+  celular String?
   fechadenacimiento DateTime?
   whysell String?
   ocupacion Boolean?
@@ -93,6 +105,8 @@ model Form {
   plano Boolean?
   finalobra Boolean?
   comentarios String?
+  roomDimensions Json?
+  totalArea Float?
 }
 enum catEnum{
   Altonivel

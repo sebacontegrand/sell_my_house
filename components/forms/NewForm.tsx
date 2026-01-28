@@ -2,6 +2,7 @@
 
 import React from "react";
 import { createForm } from "../../helpers/forms";
+import { updatePrelisting } from "../../helpers/prelistings";
 import { useRouter, redirect } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import { Label } from "../ui/label";
@@ -36,13 +37,15 @@ const NewForm = () => {
       asesor: "",
       proprietario: "",
       email: "",
-      celular: 2213648563,
+      celular: "2213648563",
       fechadenacimiento: new Date().toISOString().split("T")[0],
       whysell: "",
       ocupacion: false,
       selltobuy: false,
       solvebeforesell: "hipoteca",
       includedinsell: "muebles",
+      direccion: "",
+      propertytype: "",
     },
   });
   const id = localStorage.getItem("prelistingId");
@@ -55,20 +58,32 @@ const NewForm = () => {
     console.log("Submitted Values:", values);
     const transformedValues = {
       ...values,
-      date: new Date(values.date),
-      fechadenacimiento: new Date(values.fechadenacimiento),
+      date: values.date ? new Date(values.date) : new Date(),
+      fechadenacimiento: values.fechadenacimiento ? new Date(values.fechadenacimiento) : new Date(),
     };
-    await createForm(
-      prelistingId,
-      transformedValues.date,
-      transformedValues.email,
-      transformedValues.asesor,
-      transformedValues.proprietario,
-      transformedValues.celular
-    );
 
-    form.reset();
-    router.push("/dashboard/form");
+    try {
+      await createForm(
+        prelistingId,
+        transformedValues.date,
+        transformedValues.email || "",
+        transformedValues.asesor || "",
+        transformedValues.proprietario || "",
+        transformedValues.celular || "",
+        transformedValues.direccion || "",
+        transformedValues.propertytype || ""
+      );
+
+      // Mark prelisting as complete (blue card)
+      await updatePrelisting(prelistingId, true);
+
+      form.reset();
+      router.push("/dashboard/propriedad");
+      router.refresh();
+    } catch (error) {
+      console.error("Error creating form:", error);
+      // You might want to set a form error state here
+    }
   };
 
   return (
@@ -140,7 +155,7 @@ const NewForm = () => {
                   placeholder="celular"
                   {...field}
                   value={field.value || ""}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  onChange={(e) => field.onChange(e.target.value)}
                 />
               </FormControl>
               <FormMessage />
@@ -156,6 +171,44 @@ const NewForm = () => {
                 <Input {...field} placeholder="fechadenacimiento" type="date" />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="direccion"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Direccion" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="propertytype"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tipo de Propiedad</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccione tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {/* Enum values from schema: dpto, casa, ph, etc. */}
+                    <SelectItem value="casa">Casa</SelectItem>
+                    <SelectItem value="dpto">Departamento</SelectItem>
+                    <SelectItem value="ph">PH</SelectItem>
+                    <SelectItem value="local">Local</SelectItem>
+                    <SelectItem value="oficina">Oficina</SelectItem>
+                    <SelectItem value="lote">Lote</SelectItem>
+                    <SelectItem value="otro">Otro</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />

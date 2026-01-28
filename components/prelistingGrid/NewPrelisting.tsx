@@ -47,14 +47,6 @@ export const NewPrelisting = () => {
         Crear
       </button>
       <span className="flex flex-1"></span>
-      <button
-        onClick={() => deleteCompleted()}
-        type="button"
-        className="flex items-center justify-center rounded ml-2 bg-red-400 p-2 text-white hover:bg-red-700 transition-all"
-      >
-        <IoTrashOutline />
-        Delete Completed
-      </button>
     </form>
   );
 };

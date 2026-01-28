@@ -16,29 +16,20 @@ import LogOutButton from "./LogOutButton";
 
 const menuItem = [
   {
-    icon: <IoCalendarOutline />,
-    title: "Dashboard",
-    path: "/",
-  },
-  {
     icon: <IoCheckboxOutline />,
     title: "Propriedades",
     path: "/dashboard/propriedad",
   },
-  {
-    icon: <IoHomeOutline />,
-    title: "Prelistings",
-    path: "/dashboard/form",
-  },
+
   {
     icon: <IoCloudCircleOutline />,
     title: "feedback",
     path: "/dashboard/feedback",
   },
   {
-    icon: <IoPersonOutline />,
-    title: "Profile",
-    path: "/dashboard/profile",
+    icon: <IoCloudCircleOutline />, // Reuse icon or change if preferred
+    title: "Market Search (AI)",
+    path: "/dashboard/market-search",
   },
 ];
 const Sidebar = async () => {
