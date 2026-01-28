@@ -1,4 +1,5 @@
 import React from "react";
+export const dynamic = 'force-dynamic';
 import PromptBuilder from "@/components/market-search/PromptBuilder";
 
 const MarketSearchPage = () => {
