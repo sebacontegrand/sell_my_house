@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 const DashBoardPage = async () => {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

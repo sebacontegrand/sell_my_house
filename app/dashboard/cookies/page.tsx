@@ -1,6 +1,8 @@
 import { TabBar } from "@/components/TabBar/TabBar";
 import { cookies } from "next/headers";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: "Cookies Page",
   description: "SEO Title",

@@ -1,4 +1,4 @@
-"use server";
+export const dynamic = 'force-dynamic';
 
 import { auth } from "@/auth";
 import WidgetItem from "@/components/widgetItem/WidgetItem";
