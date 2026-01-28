@@ -3,6 +3,8 @@ import prisma from "../../../lib/prisma";
 import { NextResponse } from "next/server";
 import * as yup from 'yup'
 
+export const dynamic = 'force-dynamic';
+
 const postSchema = yup.object({
     prelistingId: yup.string().required(),
     date: yup.date().required(),

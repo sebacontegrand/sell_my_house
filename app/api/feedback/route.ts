@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import * as yup from 'yup';
 
+export const dynamic = 'force-dynamic';
+
 const feedbackSchema = yup.object({
     prelistingId: yup.string().required(),
     visitorName: yup.string().nullable().optional(),
