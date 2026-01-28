@@ -38,7 +38,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.1.0",
-    "uuidv4": "^6.2.13",
+    "uuid": "^13.0.0",
     "yup": "^1.4.0",
     "zod": "^3.23.8"
   },
