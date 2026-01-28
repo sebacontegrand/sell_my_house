@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import NextAuth, { DefaultSession } from "next-auth"
