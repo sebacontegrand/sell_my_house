@@ -47,6 +47,15 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'A form with this prelistingId already exists.' }, { status: 400 });
         }
 
+        // Check if Prelisting exists to avoid Foreign Key error
+        const existingPrelisting = await prisma.prelisting.findUnique({
+            where: { id: prelistingId }
+        });
+
+        if (!existingPrelisting) {
+            return NextResponse.json({ error: 'La propiedad (Prelisting) no existe. Por favor crea una nueva propiedad.' }, { status: 404 });
+        }
+
         const form = await prisma.form.create({
             data: {
                 prelistingId,
