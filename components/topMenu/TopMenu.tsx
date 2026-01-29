@@ -10,6 +10,7 @@ import {
 } from "react-icons/ci";
 import { SearchInput } from "./SearchInput";
 import { auth } from "@/auth";
+import { MobileMenuButton } from "./MobileMenuButton";
 
 const TopMenu = async () => {
   const cookieStore = cookies();
@@ -26,9 +27,7 @@ const TopMenu = async () => {
   return (
     <div className="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
       <div className="px-6 flex items-center justify-between space-x-4 h-full">
-        <button className="w-12 h-16 -mr-2 border-r lg:hidden">
-          <CiMenuBurger size={30} />
-        </button>
+        <MobileMenuButton />
 
         <div className="flex-1 flex justify-center">
           <div className="w-full max-w-md">
