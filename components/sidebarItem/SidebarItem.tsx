@@ -1,8 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
-import React from "react";
-import { CiBookmarkCheck } from "react-icons/ci";
+import { useUi } from "@/context/ui/UiProvider";
 
 interface Props {
   icon: React.ReactNode;
@@ -11,11 +9,14 @@ interface Props {
 }
 const SidebarItem = ({ icon, path, title }: Props) => {
   const pathName = usePathname();
+  const { closeSideMenu } = useUi();
+
   return (
     <>
       <li>
         <Link
           href={path}
+          onClick={closeSideMenu}
           className={`px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group
           hover:bg-gradient-to-r hover:bg-sky-600 hover:text-white
           ${path === pathName
