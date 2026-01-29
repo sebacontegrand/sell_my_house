@@ -15,8 +15,8 @@ export const updatePrelisting = async (id: string, complete: boolean): Promise<P
     return prelistingDb;
 }
 
-export const createPrelisting = async (description: string, title: string): Promise<Prelisting> => {
-    const body = { description, title }
+export const createPrelisting = async (description: string, title: string, photos: string[] = []): Promise<Prelisting> => {
+    const body = { description, title, photos }
     const prelistingDb = await fetch(`/api/prelistings`, {
         method: 'POST',
         body: JSON.stringify(body),

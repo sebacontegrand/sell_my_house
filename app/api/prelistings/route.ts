@@ -19,6 +19,7 @@ export async function GET(request: Request) {
 const postSchema = yup.object({
     title: yup.string().required(),
     description: yup.string().required(),
+    photos: yup.array().of(yup.string()).optional().default([]),
     complete: yup.boolean().optional().default(false)
 })
 
@@ -29,11 +30,22 @@ export async function POST(request: Request) {
         return NextResponse.json('No autorizado', { status: 401 })
     }
     try {
-        const { complete, title, description } = await postSchema.validate(await request.json())
+        const body = await request.json()
+        console.log('📸 Received body:', body)
+        const { complete, title, description, photos } = await postSchema.validate(body)
 
-        const prelisting = await prisma.prelisting.create({ data: { complete, title, description, userId: session.user.id! } })
+        const prelisting = await prisma.prelisting.create({
+            data: {
+                complete,
+                title,
+                description,
+                photos: (photos || []) as string[],
+                userId: session.user.id!
+            }
+        })
         return NextResponse.json(prelisting)
     } catch (error) {
+        console.error('❌ Validation error:', error)
         return NextResponse.json(error, { status: 400 })
     }
 

@@ -72,6 +72,25 @@ const PrelistingItem = ({ prelisting, onDelete }: Props) => {
           <strong>Operación:</strong> {prelisting.title}
         </div>
       </div>
+
+      {prelisting.photos && prelisting.photos.length > 0 && (
+        <div className="mt-4 flex gap-2 overflow-x-auto">
+          {prelisting.photos.slice(0, 4).map((photo, idx) => (
+            <img
+              key={idx}
+              src={photo}
+              alt={`Property photo ${idx + 1}`}
+              className="h-20 w-20 object-cover rounded-lg flex-shrink-0"
+            />
+          ))}
+          {prelisting.photos.length > 4 && (
+            <div className="h-20 w-20 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span className="text-sm text-gray-600">+{prelisting.photos.length - 4}</span>
+            </div>
+          )}
+        </div>
+      )}
+
       {loading && <p>Loading...</p>}
     </div>
   );

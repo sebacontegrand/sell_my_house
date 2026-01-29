@@ -18,6 +18,7 @@ model Prelisting {
   form Form?  
   title String
   description String
+  photos String[] @default([])
   complete Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
