@@ -26,7 +26,7 @@ export const SidebarWrapper = ({ children }: Props) => {
 
             <aside
                 className={clsx(
-                    "fixed z-20 top-0 pb-3 px-6 w-11/12 flex flex-col justify-between h-screen border-r bg-white transition-all duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]",
+                    "fixed z-20 top-0 pb-3 px-6 w-1/2 flex flex-col justify-between h-screen border-r bg-white transition-all duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]",
                     {
                         "ml-[-100%]": !isSideMenuOpen,
                         "ml-0": isSideMenuOpen
