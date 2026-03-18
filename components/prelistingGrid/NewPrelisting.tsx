@@ -33,12 +33,12 @@ export const NewPrelisting = () => {
   return (
     <div className="space-y-4">
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <input
             onChange={(e) => setTitle(e.target.value)}
             value={title}
             type="text"
-            className="flex-1 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-sky-500 transition-all text-gray-900"
+            className="w-full sm:flex-1 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-sky-500 transition-all text-gray-900"
             placeholder="Nombre de propriedad?"
           />
 
@@ -46,13 +46,13 @@ export const NewPrelisting = () => {
             onChange={(e) => setDescription(e.target.value)}
             value={description}
             type="text"
-            className="flex-1 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-sky-500 transition-all text-gray-900"
+            className="w-full sm:flex-1 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-sky-500 transition-all text-gray-900"
             placeholder="¿Qué necesita ser hecho?"
           />
 
           <button
             type="submit"
-            className="flex items-center justify-center rounded bg-sky-500 px-4 py-2 text-white hover:bg-sky-700 transition-all"
+            className="w-full sm:w-auto flex items-center justify-center rounded bg-sky-500 px-4 py-2 text-white hover:bg-sky-700 transition-all"
           >
             Crear
           </button>

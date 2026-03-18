@@ -4,17 +4,22 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { NewPrelisting } from "./NewPrelisting";
 import PrelistingGrid from "./PrelistingGrid";
-import { Prelisting } from "@prisma/client";
+import PropertyGrid from "./PropertyGrid";
+import { Prelisting, Property } from "@prisma/client";
 
 interface Props {
     prelistings: (Omit<Prelisting, "createdAt" | "updatedAt"> & {
         createdAt: string;
         updatedAt: string;
     })[];
+    properties: (Omit<Property, "createdAt" | "updatedAt"> & {
+        createdAt: string;
+        updatedAt: string;
+    })[];
 }
 
-export const PropertyTabs = ({ prelistings }: Props) => {
-    const [activeTab, setActiveTab] = useState<"new" | "existing">("existing");
+export const PropertyTabs = ({ prelistings, properties }: Props) => {
+    const [activeTab, setActiveTab] = useState<"fichas" | "legacy" | "new">("fichas");
     const searchParams = useSearchParams();
     const searchTerm = searchParams.get("q") || "";
 
@@ -23,39 +28,57 @@ export const PropertyTabs = ({ prelistings }: Props) => {
         item.title?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const filteredProperties = properties.filter(item =>
+        item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className="w-full relative">
-            <div className="flex space-x-4 border-b mb-6">
+            <div className="flex space-x-4 border-b mb-6 overflow-x-auto scrollbar-hide">
                 <button
-                    className={`py-2 px-4 font-medium transition-colors ${activeTab === "existing"
-                        ? "border-b-2 border-blue-600 text-blue-600"
-                        : "text-gray-500 hover:text-gray-700"
+                    className={`py-3 px-4 font-bold transition-all whitespace-nowrap ${activeTab === "fichas"
+                        ? "border-b-4 border-sky-600 text-sky-700"
+                        : "text-gray-500 hover:text-sky-600 border-b-4 border-transparent"
                         }`}
-                    onClick={() => setActiveTab("existing")}
+                    onClick={() => setActiveTab("fichas")}
                 >
-                    Ver Existentes ({filteredPrelistings.length})
+                    Fichas Compartibles ({filteredProperties.length})
                 </button>
                 <button
-                    className={`py-2 px-4 font-medium transition-colors ${activeTab === "new"
-                        ? "border-b-2 border-blue-600 text-blue-600"
-                        : "text-gray-500 hover:text-gray-700"
+                    className={`py-3 px-4 font-bold transition-all whitespace-nowrap ${activeTab === "legacy"
+                        ? "border-b-4 border-blue-600 text-blue-700"
+                        : "text-gray-500 hover:text-blue-600 border-b-4 border-transparent"
+                        }`}
+                    onClick={() => setActiveTab("legacy")}
+                >
+                    Captaciones Anteriores ({filteredPrelistings.length})
+                </button>
+                <button
+                    className={`py-3 px-4 font-bold transition-all whitespace-nowrap ${activeTab === "new"
+                        ? "border-b-4 border-emerald-600 text-emerald-700"
+                        : "text-gray-500 hover:text-emerald-600 border-b-4 border-transparent"
                         }`}
                     onClick={() => setActiveTab("new")}
                 >
-                    Nueva Propiedad
+                    + Nueva Captación
                 </button>
             </div>
 
             <div className="min-h-[400px]">
                 {activeTab === "new" ? (
                     <div className="w-full max-w-2xl mx-auto">
-                        <h2 className="text-xl font-semibold mb-4 text-gray-700">Crear Nueva Propiedad</h2>
+                        <h2 className="text-xl font-semibold mb-4 text-gray-700">Crear Nueva Captación</h2>
                         <NewPrelisting />
+                    </div>
+                ) : activeTab === "legacy" ? (
+                    <div>
+                        <h2 className="text-xl font-semibold mb-4 text-gray-700">Captaciones Anteriores</h2>
+                        <PrelistingGrid prelistings={filteredPrelistings} />
                     </div>
                 ) : (
                     <div>
-                        <h2 className="text-xl font-semibold mb-4 text-gray-700">Propiedades Existentes</h2>
-                        <PrelistingGrid prelistings={filteredPrelistings} />
+                        <PropertyGrid properties={filteredProperties} />
                     </div>
                 )}
             </div>

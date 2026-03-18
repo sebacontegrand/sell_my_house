@@ -8,6 +8,7 @@ import {
   IoCloudCircleOutline,
   IoHomeOutline,
   IoPersonOutline,
+  IoAddCircleOutline,
 } from "react-icons/io5";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
@@ -28,9 +29,14 @@ const menuItem = [
     path: "/dashboard/feedback",
   },
   {
-    icon: <IoCloudCircleOutline />, // Reuse icon or change if preferred
+    icon: <IoCloudCircleOutline />,
     title: "Market Search (AI)",
     path: "/dashboard/market-search",
+  },
+  {
+    icon: <IoAddCircleOutline />,
+    title: "Crear ficha",
+    path: "/dashboard/crear-ficha",
   },
 ];
 const Sidebar = async () => {

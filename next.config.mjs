@@ -18,6 +18,18 @@ const nextConfig = {
         {
             protocol: 'https',
             hostname: '**.public.blob.vercel-storage.com'
+        },
+        {
+            protocol: 'https',
+            hostname: 'imgar.zonapropcdn.com'
+        },
+        {
+            protocol: 'https',
+            hostname: 'www.argenprop.com'
+        },
+        {
+            protocol: 'https',
+            hostname: 'argenprop.com'
         }]
     }
 };
