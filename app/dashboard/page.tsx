@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { 
   IoSparklesOutline, 
   IoAddCircleOutline, 
@@ -13,6 +14,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function DashBoardPage() {
   const session = await auth();
+  if (!session?.user) redirect("/api/auth/signin");
 
   return (
     <div className="max-w-6xl mx-auto space-y-12 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

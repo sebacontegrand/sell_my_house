@@ -4,6 +4,9 @@ import prisma from "@/lib/prisma";
 import FeedbackFilter from "@/components/feedback/FeedbackFilter";
 import { IoChatbubblesOutline, IoStarOutline, IoTimeOutline, IoPersonOutline, IoCallOutline } from "react-icons/io5";
 
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
@@ -11,6 +14,8 @@ interface PageProps {
 }
 
 const FeedBackPage = async ({ searchParams }: PageProps) => {
+  const session = await auth();
+  if (!session?.user) redirect("/api/auth/signin");
   const prelistingId = typeof searchParams.prelistingId === 'string' ? searchParams.prelistingId : undefined;
   const propertyId = typeof searchParams.propertyId === 'string' ? searchParams.propertyId : undefined;
   

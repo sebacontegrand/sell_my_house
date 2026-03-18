@@ -1,8 +1,12 @@
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import React from "react";
 export const dynamic = 'force-dynamic';
 import PromptBuilder from "@/components/market-search/PromptBuilder";
 
-const MarketSearchPage = () => {
+const MarketSearchPage = async () => {
+    const session = await auth();
+    if (!session?.user) redirect("/api/auth/signin");
     return (
         <div className="p-6 max-w-5xl mx-auto">
             <div className="mb-8">
