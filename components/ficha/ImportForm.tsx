@@ -65,11 +65,14 @@ export default function ImportForm({ onImportSuccess }: Props) {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (!response.ok) throw new Error("Error al procesar");
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.details || "Error al procesar");
+      }
       const data = await response.json();
       onImportSuccess(data);
-    } catch (err) {
-      setError("No se pudo procesar el texto.");
+    } catch (err: any) {
+      setError(err.message || "No se pudo procesar el texto.");
     } finally {
       setIsLoading(false);
     }
@@ -144,10 +147,56 @@ export default function ImportForm({ onImportSuccess }: Props) {
             <textarea
               value={pasteText}
               onChange={(e) => setPasteText(e.target.value)}
+              onPaste={(e) => {
+                const html = e.clipboardData.getData("text/html");
+                if (html) {
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(html, "text/html");
+                  const imgs = Array.from(doc.querySelectorAll("img"));
+                  const urls = imgs
+                    .map(img => {
+                      const src = img.getAttribute("src") || 
+                                  img.getAttribute("data-src") || 
+                                  img.getAttribute("data-lazy") || 
+                                  img.getAttribute("srcset")?.split(" ")[0];
+                      return src;
+                    })
+                    .filter((src): src is string => 
+                      !!src && 
+                      src.startsWith("http") && 
+                      !src.includes("icon") && 
+                      !src.includes("logo") &&
+                      !src.includes("pixel") &&
+                      !src.includes("marker") &&
+                      !src.includes("avatar")
+                    );
+                  
+                  if (urls.length > 0) {
+                    setPastedImages(prev => {
+                      const newOnes = urls.filter(u => !prev.includes(u));
+                      return [...prev, ...newOnes];
+                    });
+                  }
+                }
+              }}
               placeholder="Pega la descripción de la propiedad aquí..."
               className="relative w-full h-48 bg-white border-slate-100 rounded-[2rem] p-6 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-slate-200 transition-all placeholder:text-slate-300 resize-none"
               required
             />
+            {pastedImages.length > 0 && (
+              <div className="absolute bottom-4 right-6 flex items-center gap-2 px-3 py-1.5 bg-sky-50 text-sky-600 rounded-full border border-sky-100 animate-in fade-in zoom-in duration-300">
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  ✨ {pastedImages.length} fotos detectadas
+                </span>
+                <button 
+                  type="button"
+                  onClick={() => setPastedImages([])}
+                  className="hover:text-red-500 transition-colors"
+                >
+                  <span className="text-sm">×</span>
+                </button>
+              </div>
+            )}
           </div>
           <Button
             type="submit"

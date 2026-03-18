@@ -13,6 +13,17 @@ const AnimatedBackground = () => {
     "border-violet-200 bg-violet-50/20",
   ];
 
+  const blockConfigs = [
+    { w: 420, h: 210, t: 15, l: 30, d: -10, dur: 75 },
+    { w: 280, h: 320, t: 65, l: 80, d: -25, dur: 55 },
+    { w: 350, h: 180, t: 40, l: 15, d: -5, dur: 85 },
+    { w: 190, h: 290, t: 80, l: 45, d: -18, dur: 60 },
+    { w: 480, h: 150, t: 25, l: 70, d: -2, dur: 90 },
+    { w: 220, h: 340, t: 55, l: 10, d: -28, dur: 50 },
+    { w: 310, h: 260, t: 10, l: 90, d: -15, dur: 70 },
+    { w: 400, h: 200, t: 90, l: 60, d: -8, dur: 80 },
+  ];
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
       {/* Base Blurred Photo Layer - SIGNIFICANTLY MORE VISIBLE */}
@@ -54,17 +65,17 @@ const AnimatedBackground = () => {
 
       {/* Drifting Pastel Room Blocks */}
       <div className="absolute inset-0">
-        {[...Array(8)].map((_, i) => (
+        {blockConfigs.map((config, i) => (
           <div
             key={i}
             className={`absolute border-2 rounded-2xl animate-drift backdrop-blur-[4px] shadow-sm ${pastelColors[i % pastelColors.length]}`}
             style={{
-              width: `${Math.random() * 350 + 150}px`,
-              height: `${Math.random() * 250 + 100}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * -30}s`,
-              animationDuration: `${Math.random() * 40 + 50}s`,
+              width: `${config.w}px`,
+              height: `${config.h}px`,
+              top: `${config.t}%`,
+              left: `${config.l}%`,
+              animationDelay: `${config.d}s`,
+              animationDuration: `${config.dur}s`,
               opacity: 0.5
             }}
           >

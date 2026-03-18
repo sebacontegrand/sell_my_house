@@ -5,6 +5,7 @@ export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
 
+  let responseText = "";
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     const { text, images } = await req.json();
@@ -19,10 +20,10 @@ export async function POST(req: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 
-    console.log("Starting AI parse for text of length:", text.length);
+    console.log("Starting AI parse for text of length:", text.length, "and images:", images?.length || 0);
 
 
     const prompt = `
@@ -43,14 +44,14 @@ export async function POST(req: NextRequest) {
       - bathrooms (integer)
       - description (the full descriptive text, cleaned of original contact info like phone numbers/emails)
       - features (an array of string features like ["Piscina", "Cochera", "Seguridad"])
-      - photos (an array of string URLs selected from the provided "Copied Images" list. Only include URLs that look like actual property photos, ignoring tracking pixels, icons, or logos)
+      - photos (an array of string URLs. SELECT URLs from the provided "Copied Images" list below that are clearly property photos. If you find absolute image URLs in the "Raw text" that are not in the list, you may include them too. Ignore tracking pixels, icons, small thumbnails, Avatars, logos, or UI elements. Be inclusive but only for property photos. Prioritize URLs that are high resolution.)
 
       Raw text:
       """
       ${text}
       """
       
-      Copied Images:
+      Copied Images (priority for selection):
       """
       ${images ? images.join("\n") : "None"}
       """
@@ -59,7 +60,7 @@ export async function POST(req: NextRequest) {
     `;
 
     const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    responseText = result.response.text();
     console.log("Raw AI Response:", responseText);
     
     // Improved JSON extraction: find the first { and last }
@@ -86,9 +87,18 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error("AI Parse error detail:", error);
+
+    // Handle quota exceeded (429) with a user-friendly message
+    if (error.status === 429) {
+      return NextResponse.json({
+        error: "AI service quota exceeded",
+        details: "El servicio de IA alcanzó su límite de uso. Por favor, intenta de nuevo en unos minutos.",
+      }, { status: 429 });
+    }
+
     return NextResponse.json({ 
       error: "Failed to parse text with AI",
-      details: error.message || "Unknown error"
+      details: error.message || "Unknown error",
     }, { status: 500 });
   }
 }

@@ -15,11 +15,26 @@ interface PageProps {
 
 const FeedBackPage = async ({ searchParams }: PageProps) => {
   const session = await auth();
-  if (!session?.user) redirect("/api/auth/signin");
+  if (!session?.user?.email) redirect("/api/auth/signin");
+
+  // Ensure we have the DB user ID for filtering
+  const dbUser = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true }
+  });
+
+  if (!dbUser) redirect("/api/auth/signin");
+
   const prelistingId = typeof searchParams.prelistingId === 'string' ? searchParams.prelistingId : undefined;
   const propertyId = typeof searchParams.propertyId === 'string' ? searchParams.propertyId : undefined;
   
-  const whereClause: { prelistingId?: string; propertyId?: string } = {};
+  const whereClause: any = {
+    OR: [
+      { prelisting: { userId: dbUser.id } },
+      { property: { userId: dbUser.id } }
+    ]
+  };
+
   if (prelistingId) whereClause.prelistingId = prelistingId;
   if (propertyId) whereClause.propertyId = propertyId;
 
@@ -33,8 +48,9 @@ const FeedBackPage = async ({ searchParams }: PageProps) => {
   });
 
   const totalFeedbacks = feedbacks.length;
-  const averageRating = totalFeedbacks > 0
-    ? (feedbacks.reduce((acc: number, curr: any) => acc + (curr.rating || 0), 0) / feedbacks.filter((f: any) => f.rating).length || 1).toFixed(1)
+  const feedbacksWithRating = feedbacks.filter((f: any) => f.rating);
+  const averageRating = feedbacksWithRating.length > 0
+    ? (feedbacksWithRating.reduce((acc: number, curr: any) => acc + (curr.rating || 0), 0) / feedbacksWithRating.length).toFixed(1)
     : "0.0";
 
   return (
@@ -113,7 +129,7 @@ const FeedBackPage = async ({ searchParams }: PageProps) => {
                     </div>
                     <div className="flex items-center gap-2 text-slate-300 font-black text-xs uppercase tracking-widest bg-slate-50 px-4 py-2 rounded-full">
                       <IoTimeOutline size={14} />
-                      {item.createdAt.toLocaleDateString()}
+                      {item.createdAt instanceof Date ? item.createdAt.toLocaleDateString() : 'Fecha desconocida'}
                     </div>
                   </div>
 

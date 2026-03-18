@@ -24,6 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.sub = user.id
         token.roles = (user as any).roles
         token.isActive = (user as any).isActive
       }
@@ -31,7 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id as string
+        session.user.id = (token.sub || token.id) as string;
         session.user.roles = (token.roles as string[]) || ["user"]
         session.user.isActive = (token.isActive as boolean) ?? true
       }

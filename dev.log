@@ -1,0 +1,57 @@
+
+> pre-listing@0.1.0 dev
+> next dev
+
+[32m✔[0m [33mConsole Ninja[0m extension is connected to [33mNext.js[0m, see [36mhttps://tinyurl.com/2vt8jxzw[0m
+  ▲ Next.js 14.2.3
+  - Local:        http://localhost:3000
+  - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 1358ms
+ ✓ Compiled /middleware in 179ms (214 modules)
+ ✓ Compiled /api/auth/[...nextauth] in 109ms (190 modules)
+[31m[auth][error][0m UnknownAction: Only GET and POST requests are supported. Read more at https://errors.authjs.dev#unknownaction
+    at toInternalRequest (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/utils/web.js:34:19)
+    at Auth (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/index.js:87:103)
+    at httpHandler (webpack-internal:///(rsc)/./node_modules/next-auth/index.js:142:82)
+    at /Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:53452
+    at /Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/lib/trace/tracer.js:122:103
+    at NoopContextManager.with (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NextTracerImpl.trace (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/lib/trace/tracer.js:122:28)
+    at /Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46261
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
+    at Object.wrap (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:39188)
+    at /Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:45368
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
+    at Object.wrap (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:37583)
+    at /Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:45330
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
+    at e_.execute (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:44777)
+    at e_.handle (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:54711)
+    at doRender (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/base-server.js:1377:60)
+    at cacheEntry.responseCache.get.routeKind (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/base-server.js:1587:46)
+    at ResponseCache.get (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/response-cache/index.js:49:26)
+    at DevServer.renderToResponseWithComponentsImpl (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/base-server.js:1507:53)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async DevServer.renderPageComponent (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/base-server.js:816:17)
+    at async /Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/Users/sebastianconte-grand/Desktop/imac/sell_my_house/node_modules/next/dist/server/lib/start-server.js:143:13)
+ HEAD /api/auth/signin/google 400 in 310ms
+ GET /api/auth/signin 200 in 10ms
+[?25h

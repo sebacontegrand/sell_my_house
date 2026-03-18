@@ -8,7 +8,10 @@ import { revalidatePath } from "next/cache";
 
 export async function saveProperty(data: any) {
   const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
+  if (!session?.user?.id) {
+    console.error("SaveProperty Unauthorized. Session:", JSON.stringify(session, null, 2));
+    throw new Error("Unauthorized");
+  }
 
   // Fetch the latest user profile to ensure contact info is up to date
   const userProfile = await prisma.user.findUnique({

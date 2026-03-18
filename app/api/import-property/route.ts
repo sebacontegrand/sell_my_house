@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
 
     // 2. Use Gemini to parse the Markdown
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 
 
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
       - bathrooms (integer)
       - description (the full descriptive text, cleaned of original contact info like phone numbers/emails)
       - features (an array of string features like ["Piscina", "Cochera", "Seguridad"])
-      - photos (an array of clean image URLs found in the markdown, e.g., from ![alt](image_url). Ensure they are absolute URLs starting with http/https and look like photos of the property, not icons/logos)
+      - photos (an array of absolute image URLs found in the markdown, e.g., from ![alt](image_url) or within <img src="..."> tags. Only include URLs that look like property photos, high-res previews, or gallery images. Ignore icons, avatars, maps, or UI logos. Prioritize URLs containing "original", "large", "property", or image extensions like .jpg, .png, .webp)
 
       Raw Markdown text:
       """
