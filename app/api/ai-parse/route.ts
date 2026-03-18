@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
+
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     const { text, images } = await req.json();
@@ -16,7 +19,8 @@ export async function POST(req: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
 
     const prompt = `
       Extract property information from the following raw text and return it as a structured JSON object.

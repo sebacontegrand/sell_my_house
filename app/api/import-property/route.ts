@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ScrapedPropertyData } from "@/lib/types/property";
 
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
+
   try {
     const { url } = await req.json();
 
@@ -49,7 +52,8 @@ export async function POST(req: NextRequest) {
 
     // 2. Use Gemini to parse the Markdown
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
 
     const prompt = `
       Extract property information from the following web scraped markdown text and return it as a structured JSON object.

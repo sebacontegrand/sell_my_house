@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ImportForm from "./ImportForm";
 import PropertyForm from "./PropertyForm";
 import { Property } from "@/lib/types/property";
@@ -16,7 +16,14 @@ interface Props {
 
 export default function CrearFichaClient({ userId, userProfile }: Props) {
   const [importedData, setImportedData] = useState<Partial<Property> | null>(null);
+  const [origin, setOrigin] = useState<string>("");
   const router = useRouter();
+
+  useEffect(() => {
+    // Prefer environment variable if available, otherwise use window.location.origin
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+    setOrigin(appUrl);
+  }, []);
 
   const handleImportSuccess = async (data: Partial<Property>) => {
     const fullData = {
@@ -115,8 +122,10 @@ export default function CrearFichaClient({ userId, userProfile }: Props) {
         officeName: "${userProfile?.officeName || ""}"
       };
 
-      const url = "${window.location.origin}/dashboard/import?data=" + encodeURIComponent(JSON.stringify(data));
+      const appOrigin = "${origin || "https://sell-my-house.vercel.app"}";
+      const url = appOrigin + "/dashboard/import?data=" + encodeURIComponent(JSON.stringify(data));
       window.location.href = url;
+
     })();`.replace(/\s+/g, ' ');
 
     return (

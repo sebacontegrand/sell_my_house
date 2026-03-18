@@ -1,28 +1,38 @@
 import { z } from "zod";
 
+const numOrNull = z.preprocess(
+  (val) => (val === "" || val === null || val === undefined || Number.isNaN(val) ? null : Number(val)),
+  z.number().nullable().optional()
+);
+
+const intOrNull = z.preprocess(
+  (val) => (val === "" || val === null || val === undefined || Number.isNaN(val) ? null : Number(val)),
+  z.number().int().nullable().optional()
+);
+
 export const propertySchema = z.object({
   id: z.string().uuid().optional(),
   externalUrl: z.string().url().optional().or(z.literal("")),
   title: z.string().min(3, "El título es requerido"),
   operationType: z.string().optional(),
   propertyType: z.string().optional(),
-  price: z.number().nullable().optional(),
+  price: numOrNull,
   currency: z.string().default("USD"),
-  expenses: z.number().nullable().optional(),
+  expenses: numOrNull,
   address: z.string().optional(),
   city: z.string().optional(),
   neighborhood: z.string().optional(),
-  totalArea: z.number().nullable().optional(),
-  coveredArea: z.number().nullable().optional(),
-  rooms: z.number().int().nullable().optional(),
-  bedrooms: z.number().int().nullable().optional(),
-  bathrooms: z.number().int().nullable().optional(),
-  garage: z.number().int().nullable().optional(),
+  totalArea: numOrNull,
+  coveredArea: numOrNull,
+  rooms: intOrNull,
+  bedrooms: intOrNull,
+  bathrooms: intOrNull,
+  garage: intOrNull,
   description: z.string().min(10, "La descripción es requerida"),
   features: z.array(z.string()).default([]),
   photos: z.array(z.string()).default([]),
-  latitude: z.number().nullable().optional(),
-  longitude: z.number().nullable().optional(),
+  latitude: numOrNull,
+  longitude: numOrNull,
   
   // Contact Info
   agentName: z.string().optional(),
