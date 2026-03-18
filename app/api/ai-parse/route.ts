@@ -19,7 +19,10 @@ export async function POST(req: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+
+    console.log("Starting AI parse for text of length:", text.length);
 
 
     const prompt = `
@@ -68,13 +71,19 @@ export async function POST(req: NextRequest) {
       jsonStr = jsonStr.substring(firstBrace, lastBrace + 1);
     }
 
-    const data = JSON.parse(jsonStr);
+    try {
+      const data = JSON.parse(jsonStr);
+      return NextResponse.json({
+        ...data,
+        source: "manual",
+        photos: data.photos || []
+      });
+    } catch (parseError: any) {
+      console.error("Failed to parse JSON from AI response:", parseError);
+      console.log("Problematic string:", jsonStr);
+      throw new Error("Invalid format returned by AI: " + parseError.message);
+    }
 
-    return NextResponse.json({
-      ...data,
-      source: "manual",
-      photos: data.photos || []
-    });
   } catch (error: any) {
     console.error("AI Parse error detail:", error);
     return NextResponse.json({ 

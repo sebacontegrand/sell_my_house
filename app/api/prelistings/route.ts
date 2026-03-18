@@ -6,14 +6,28 @@ import * as yup from 'yup'
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url)
+    const session = await auth();
+    const email = session?.user?.email;
 
-    const take = Number(searchParams.get('take'))
-    const skip = Number(searchParams.get('skip'))
+    if (!email) {
+        return NextResponse.json({ prelistings: [], properties: [] });
+    }
 
-    const prelistings = await prisma.prelisting.findMany()
-    console.log("%c Line:13 🥔 prelistings", "color:#f5ce50", prelistings);
-    return NextResponse.json(prelistings)
+    const user = await prisma.user.findUnique({
+        where: { email },
+        select: { id: true }
+    });
+
+    if (!user) {
+        return NextResponse.json({ prelistings: [], properties: [] });
+    }
+
+    const [prelistings, properties] = await Promise.all([
+        prisma.prelisting.findMany({ where: { userId: user.id } }),
+        prisma.property.findMany({ where: { userId: user.id } })
+    ]);
+
+    return NextResponse.json({ prelistings, properties });
 }
 
 const postSchema = yup.object({

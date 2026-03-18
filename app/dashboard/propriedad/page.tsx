@@ -16,18 +16,28 @@ export const metadata = {
 
 const PropriedadPage = async () => {
   const session = await auth();
-  if (!session?.user) redirect("/api/auth/signin");
+  if (!session?.user?.email) redirect("/api/auth/signin");
   
+  // Ensure we have the DB user ID
+  const dbUser = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true }
+  });
+
+  if (!dbUser) redirect("/api/auth/signin");
+
   const [dbPrelistings, dbProperties] = await Promise.all([
     prisma.prelisting.findMany({
-      where: { userId: session.user.id },
+      where: { userId: dbUser.id },
       orderBy: { description: "asc" },
     }),
     prisma.property.findMany({
-      where: { userId: session.user.id },
+      where: { userId: dbUser.id },
       orderBy: { createdAt: "desc" },
     }),
   ]);
+
+  console.log(`[PROPRIEDAD DEBUG] User: ${session.user.id}, Prelistings: ${dbPrelistings.length}, Properties: ${dbProperties.length}`);
 
   const prelistings = dbPrelistings.map((item: typeof dbPrelistings[0]) => ({
     ...item,

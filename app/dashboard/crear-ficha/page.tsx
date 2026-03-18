@@ -10,7 +10,6 @@ export const metadata = {
 
 export default async function CrearFichaPage() {
   const session = await auth();
-  if (!session?.user?.id) redirect("/api/auth/signin");
 
   const userProfile = await getUserProfile();
 

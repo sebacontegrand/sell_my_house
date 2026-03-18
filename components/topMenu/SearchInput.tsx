@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { CiSearch } from "react-icons/ci";
+import { IoSearchOutline } from "react-icons/io5";
 
 export const SearchInput = () => {
     const searchParams = useSearchParams();
@@ -16,31 +16,26 @@ export const SearchInput = () => {
         } else {
             params.delete("q");
         }
-
-        // Only redirect/filter if we are on the properties page (or logic to decide)
-        // For now, if we assume this search is GLOBAL or specifically for properties, 
-        // maybe we should ensure we are on /dashboard/propriedad?
-        // The user said "in search bar i need to search for propriedades", implies this bar controls that list.
-        // If we are NOT on /dashboard/propriedad, maybe we should redirect there?
-        // Let's assume simpler: Just update params. PropertyTabs will listen if present.
-        // IF user wants to search from other pages, we might need:
-        // if (pathname !== '/dashboard/propriedad') replace(`/dashboard/propriedad?${params.toString()}`);
-
         replace(`${pathname}?${params.toString()}`);
     }, 300);
 
     return (
-        <div className="relative flex items-center text-gray-400 focus-within:text-cyan-400">
-            <span className="absolute left-4 h-6 flex items-center pr-3 border-r border-gray-300">
-                <CiSearch />
-            </span>
+        <div className="relative group max-w-md w-full">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-slate-900 transition-colors">
+                <IoSearchOutline size={18} />
+            </div>
             <input
                 type="text"
-                placeholder="Buscar por nombre u operación..."
-                className="w-full pl-14 pr-4 py-2.5 rounded-xl text-sm text-gray-600 outline-none border border-gray-300 focus:border-cyan-300 transition"
+                placeholder="Busca propiedades..."
+                className="w-full h-11 bg-slate-50 border-none rounded-2xl pl-11 pr-4 text-sm font-bold text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-slate-200 transition-all"
                 defaultValue={searchParams.get("q")?.toString()}
                 onChange={(e) => handleSearch(e.target.value)}
             />
+            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border border-slate-200 bg-white px-1.5 font-mono text-[10px] font-medium text-slate-400 opacity-100">
+                  <span className="text-xs">⌘</span>K
+                </kbd>
+            </div>
         </div>
     );
 };

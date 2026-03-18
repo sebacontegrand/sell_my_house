@@ -1,7 +1,7 @@
 "use client";
 
 import { useUi } from "@/context/ui/UiProvider";
-import { CiMenuBurger } from "react-icons/ci";
+import { IoMenuOutline } from "react-icons/io5";
 
 export const MobileMenuButton = () => {
     const { toggleSideMenu } = useUi();
@@ -9,9 +9,9 @@ export const MobileMenuButton = () => {
     return (
         <button
             onClick={toggleSideMenu}
-            className="w-12 h-16 -mr-2 border-r lg:hidden flex items-center justify-center hover:bg-gray-100 transition-colors"
+            className="w-10 h-10 lg:hidden flex items-center justify-center bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors"
         >
-            <CiMenuBurger size={30} />
+            <IoMenuOutline size={24} className="text-slate-900" />
         </button>
     )
 }

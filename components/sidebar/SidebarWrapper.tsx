@@ -1,7 +1,7 @@
 "use client";
 
 import { useUi } from "@/context/ui/UiProvider";
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 interface Props {
     children: React.ReactNode;
@@ -12,25 +12,19 @@ export const SidebarWrapper = ({ children }: Props) => {
 
     return (
         <>
-            {/* Background Overlay (Blakc backdrop) */}
-            {isSideMenuOpen && (
-                <div
-                    className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30 transition-opacity lg:hidden"
-                    onClick={closeSideMenu}
-                />
-            )}
-
-            {/* Blur Overlay (Optional, matching 'aside' z-index logic if needed) 
-          Actually, the aside is z-20 (on top of backdrop)
-      */}
+            {/* Background Overlay */}
+            <div
+                className={cn(
+                  "fixed inset-0 z-40 bg-slate-900/10 backdrop-blur-sm transition-opacity duration-500 lg:hidden",
+                  isSideMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                )}
+                onClick={closeSideMenu}
+            />
 
             <aside
-                className={clsx(
-                    "fixed z-20 top-0 pb-3 px-6 w-10/12 flex flex-col justify-between h-screen border-r bg-white transition-all duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]",
-                    {
-                        "ml-[-100%]": !isSideMenuOpen,
-                        "ml-0": isSideMenuOpen
-                    }
+                className={cn(
+                    "fixed z-50 top-0 left-0 h-screen w-72 bg-white/50 backdrop-blur-xl transition-all duration-500 border-r border-slate-50 lg:translate-x-0",
+                    isSideMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                 )}
             >
                 {children}

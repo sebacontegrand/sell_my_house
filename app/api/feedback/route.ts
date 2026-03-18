@@ -7,12 +7,13 @@ import { sendFeedbackNotification } from "@/lib/email";
 export const dynamic = 'force-dynamic';
 
 const feedbackSchema = yup.object({
-    prelistingId: yup.string().required(),
+    prelistingId: yup.string().nullable().optional(),
+    propertyId: yup.string().nullable().optional(),
     visitorName: yup.string().nullable().optional(),
     visitorContact: yup.string().nullable().optional(),
     impression: yup.string().required(),
     rating: yup.number().nullable().optional(),
-});
+}).test('at-least-one', 'Debe seleccionar una propiedad o prelisting', (value) => !!value.prelistingId || !!value.propertyId);
 
 export async function POST(request: Request) {
     const session = await auth();
@@ -26,7 +27,8 @@ export async function POST(request: Request) {
 
         const feedback = await prisma.feedback.create({
             data: {
-                prelistingId: validatedData.prelistingId,
+                prelisting: validatedData.prelistingId ? { connect: { id: validatedData.prelistingId } } : undefined,
+                property: validatedData.propertyId ? { connect: { id: validatedData.propertyId } } : undefined,
                 visitorName: validatedData.visitorName || null,
                 visitorContact: validatedData.visitorContact || null,
                 impression: validatedData.impression,
@@ -36,28 +38,31 @@ export async function POST(request: Request) {
                 prelisting: {
                     select: {
                         title: true,
-                        form: {
-                            select: {
-                                email: true,
-                            }
-                        }
+                        form: { select: { email: true } }
+                    }
+                },
+                property: {
+                    select: {
+                        title: true,
+                        agentEmail: true
                     }
                 }
             }
         });
 
         // Send email notifications
-        if (feedback.prelisting.form?.email || session.user.email) {
-            await sendFeedbackNotification({
-                propertyTitle: feedback.prelisting.title,
-                visitorName: feedback.visitorName,
-                visitorContact: feedback.visitorContact,
-                impression: feedback.impression,
-                rating: feedback.rating,
-                propertyOwnerEmail: feedback.prelisting.form?.email || '',
-                asesorEmail: session.user.email || '',
-            });
-        }
+        const propertyTitle = (feedback as any).property?.title || (feedback as any).prelisting?.title || 'Propiedad sin título';
+        const ownerEmail = (feedback as any).property?.agentEmail || (feedback as any).prelisting?.form?.email || '';
+
+        await sendFeedbackNotification({
+            propertyTitle,
+            visitorName: feedback.visitorName,
+            visitorContact: feedback.visitorContact,
+            impression: feedback.impression,
+            rating: feedback.rating,
+            propertyOwnerEmail: ownerEmail,
+            asesorEmail: session.user.email || '',
+        });
 
         return NextResponse.json(feedback);
     } catch (error) {
@@ -77,16 +82,19 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const prelistingId = searchParams.get('prelistingId');
+    const propertyId = searchParams.get('propertyId');
 
     try {
-        const whereClause = prelistingId ? { prelistingId } : {};
+        const whereClause: { prelistingId?: string; propertyId?: string } = {};
+        if (prelistingId) whereClause.prelistingId = prelistingId;
+        if (propertyId) whereClause.propertyId = propertyId;
+
         const feedbackList = await prisma.feedback.findMany({
             where: whereClause,
             orderBy: { createdAt: 'desc' },
             include: {
-                prelisting: {
-                    select: { title: true }
-                }
+                prelisting: { select: { title: true } },
+                property: { select: { title: true } }
             }
         });
         return NextResponse.json(feedbackList);

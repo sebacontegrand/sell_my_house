@@ -29,8 +29,10 @@ model Prelisting {
 
 model Feedback {
   id String @id @default(uuid())
-  prelistingId String
-  prelisting Prelisting @relation(fields:[prelistingId],references:[id], onDelete: Cascade)
+  prelistingId String?
+  prelisting Prelisting? @relation(fields:[prelistingId],references:[id], onDelete: Cascade)
+  propertyId   String?
+  property     Property?   @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   visitorName String?
   visitorContact String?
@@ -300,6 +302,7 @@ model Property {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  feedback        Feedback[]
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
 }

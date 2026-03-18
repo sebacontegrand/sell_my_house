@@ -16,8 +16,12 @@ export async function POST(req: NextRequest) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       console.error("GEMINI_API_KEY is missing in environment");
-      return NextResponse.json({ error: "AI service not configured." }, { status: 500 });
+      return NextResponse.json({ 
+        error: "AI service missing in environment (GEMINI_API_KEY)", 
+        envStatus: "Missing" 
+      }, { status: 500 });
     }
+
 
     // 1. Fetch content from Jina AI Reader API
     const jinaUrl = `https://r.jina.ai/${url}`;
@@ -52,7 +56,8 @@ export async function POST(req: NextRequest) {
 
     // 2. Use Gemini to parse the Markdown
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
 
 
     const prompt = `
@@ -119,8 +124,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(data);
   } catch (error: any) {
-    console.error("Scraping AI error:", error);
-    return NextResponse.json({ error: "Failed to parse property using AI", details: error.message || String(error) }, { status: 500 });
+    console.error("Scraping AI error detail:", error);
+    return NextResponse.json({ 
+      error: "Error processing property with IA", 
+      details: error.message || String(error),
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined
+    }, { status: 500 });
   }
+
 }
 

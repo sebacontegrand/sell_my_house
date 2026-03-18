@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { IoCloudDownloadOutline } from "react-icons/io5";
+import { IoLinkOutline, IoTextOutline, IoSparklesOutline } from "react-icons/io5";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface Props {
   onImportSuccess: (data: any) => void;
@@ -32,42 +35,19 @@ export default function ImportForm({ onImportSuccess }: Props) {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (!response.ok) throw new Error("Error al importar la propiedad");
-      
+      if (!response.ok) throw new Error("Error al importar");
       const data = await response.json();
       
       if (data.isBlocked) {
-        setError("El sitio de origen está bloqueando el acceso automático. Por favor, complete la información manualmente.");
         onImportSuccess({ source: "manual", externalUrl: url, title: "", description: "", photos: [] });
         return;
       }
 
       onImportSuccess(data);
-      
     } catch (err) {
-      setError("No se pudo extraer la información automatically. Puede continuar manualmente.");
       onImportSuccess({ source: "manual", externalUrl: url, title: "", description: "", photos: [] });
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handlePasteEvent = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-    // Attempt to read rich HTML from clipboard to extract images when user Ctrl+C the whole page
-    const html = e.clipboardData.getData("text/html");
-    if (html) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      const imgs = Array.from(doc.querySelectorAll("img"));
-      const imageUrls = imgs
-        .map((img) => img.src)
-        .filter((src) => src && src.startsWith("http") && !src.includes("data:image"));
-      
-      // Deduplicate
-      const uniqueUrls = Array.from(new Set(imageUrls));
-      if (uniqueUrls.length > 0) {
-        setPastedImages(uniqueUrls);
-      }
     }
   };
 
@@ -85,118 +65,120 @@ export default function ImportForm({ onImportSuccess }: Props) {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (!response.ok) throw new Error("Error al procesar el texto");
-      
+      if (!response.ok) throw new Error("Error al procesar");
       const data = await response.json();
       onImportSuccess(data);
     } catch (err) {
-      setError("No se pudo procesar el texto con IA. Por favor, intente con otra descripción o complete manualmente.");
+      setError("No se pudo procesar el texto.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex gap-4 p-1 bg-gray-100 rounded-xl w-fit">
-        <button
-          onClick={() => setMode("url")}
-          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${mode === "url" ? "bg-white text-sky-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-        >
-          Importar URL
-        </button>
-        <button
-          onClick={() => setMode("ai")}
-          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${mode === "ai" ? "bg-white text-sky-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-        >
-          Pegar Texto (IA)
-        </button>
+    <div className="w-full space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-center space-y-3">
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight">Importación Mágica</h2>
+          <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Pega un link o texto y nosotros hacemos el resto</p>
+        </div>
+      </div>
+
+      <div className="flex justify-center">
+        <div className="flex p-1 bg-slate-100 rounded-2xl w-full max-w-[300px]">
+          <button 
+            onClick={() => setMode('url')}
+            className={cn(
+              "flex-1 py-2 px-4 rounded-xl text-xs font-black tracking-widest transition-all",
+              mode === 'url' ? "bg-white text-slate-900 shadow-sm" : "text-slate-400"
+            )}
+          >
+            DESDE URL
+          </button>
+          <button 
+            onClick={() => setMode('ai')}
+            className={cn(
+              "flex-1 py-2 px-4 rounded-xl text-xs font-black tracking-widest transition-all",
+              mode === 'ai' ? "bg-white text-slate-900 shadow-sm" : "text-slate-400"
+            )}
+          >
+            TEXTO LIBRE
+          </button>
+        </div>
       </div>
 
       {mode === "url" ? (
-        <form onSubmit={handleImport} className="space-y-4">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="url" className="text-sm font-medium text-gray-700">
-              URL de la publicación (Argenprop, Zonaprop, etc.)
-            </label>
-            <div className="flex flex-col sm:row gap-4">
-              <input
-                id="url"
-                type="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://www.argenprop.com/casa-en-venta..."
-                className="flex-1 px-4 py-3 rounded-lg border-2 border-gray-200 outline-none focus:border-sky-500 transition-all"
-                required
-              />
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-sky-500 text-white rounded-lg font-semibold hover:bg-sky-600 transition-colors disabled:bg-sky-300 min-w-[200px]"
-              >
-                {isLoading ? (
-                  <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
-                ) : (
-                  <>
-                    <span>🤖</span>
-                    Importar con IA
-                  </>
-                )}
-              </button>
+        <form onSubmit={handleImport} className="space-y-6">
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-sky-400 to-blue-500 rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-500" />
+            <div className="relative flex flex-col md:flex-row gap-3">
+               <Input
+                 type="url"
+                 value={url}
+                 onChange={(e) => setUrl(e.target.value)}
+                 placeholder="Link de Argenprop, Zonaprop..."
+                 className="flex-1 h-14 bg-white border-slate-100 rounded-2xl text-lg font-bold px-6 focus-visible:ring-slate-200"
+                 required
+               />
+               <Button
+                 type="submit"
+                 disabled={isLoading || !url}
+                 className="h-14 px-8 rounded-2xl bg-slate-900 hover:bg-black font-black text-lg gap-3 min-w-[200px]"
+               >
+                 {isLoading ? (
+                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                 ) : (
+                   <>
+                     <IoSparklesOutline size={22} className="text-sky-400" />
+                     Crear Ficha AI
+                   </>
+                 )}
+               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-1">Usamos Inteligencia Artificial para leer el sitio y extraer los datos.</p>
           </div>
         </form>
       ) : (
-        <form onSubmit={handleAiPaste} className="space-y-4">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">
-              Copia y pega toda la descripción de la propiedad aquí
-            </label>
+        <form onSubmit={handleAiPaste} className="space-y-6 animate-in slide-in-from-right-4 duration-500">
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-sky-400 to-blue-500 rounded-[2.5rem] blur opacity-10" />
             <textarea
               value={pasteText}
               onChange={(e) => setPasteText(e.target.value)}
-              onPaste={handlePasteEvent}
-              placeholder="Ej: 'Hermosa casa de 3 ambientes en Palermo, 120m2 totales, 2 baños...'"
-              rows={6}
-              className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 outline-none focus:border-sky-500 transition-all resize-none"
+              placeholder="Pega la descripción de la propiedad aquí..."
+              className="relative w-full h-48 bg-white border-slate-100 rounded-[2rem] p-6 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-slate-200 transition-all placeholder:text-slate-300 resize-none"
               required
             />
-            <button
-              type="submit"
-              disabled={isLoading || !pasteText.trim()}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors disabled:bg-indigo-300"
-            >
-              {isLoading ? (
-                <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
-              ) : (
-                <>
-                  <span>🤖</span>
-                  Procesar con Inteligencia Artificial
-                </>
-              )}
-            </button>
           </div>
+          <Button
+            type="submit"
+            disabled={isLoading || !pasteText.trim()}
+            className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-black font-black text-xl gap-3"
+          >
+            {isLoading ? (
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <>
+                <IoSparklesOutline size={22} className="text-sky-400" />
+                Extraer con AI
+              </>
+            )}
+          </Button>
         </form>
       )}
 
       {error && (
-        <div className="p-4 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100">
+        <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-bold border border-red-100 animate-in fade-in duration-300">
           {error}
         </div>
       )}
       
-      <div className="mt-8 border-t pt-8">
-        <div className="rounded-lg bg-blue-50 p-4 border border-blue-100">
-          <h4 className="flex items-center gap-2 text-blue-800 font-semibold mb-2">
-            <span>ℹ️</span> ¿Cómo funciona?
-          </h4>
-          <ul className="text-sm text-blue-700 space-y-1 list-disc ml-5">
-            <li>Extraemos fotos, precio, descripción y características.</li>
-            <li>Podrás editar toda la información antes de guardar.</li>
-            <li>Tu información de contacto reemplazará a la original.</li>
-          </ul>
-        </div>
+      <div className="flex items-center justify-center pt-4">
+        <button 
+          onClick={() => onImportSuccess({ source: "manual" })}
+          className="text-slate-400 hover:text-slate-900 font-bold text-sm transition-colors border-b-2 border-transparent hover:border-slate-900 pb-0.5"
+        >
+          O empezar manualmente
+        </button>
       </div>
     </div>
   );

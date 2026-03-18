@@ -2,12 +2,21 @@
 
 import { Property } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import {
-  IoTrashOutline,
-  IoShareSocialOutline,
-  IoOpenOutline,
-  IoLogoWhatsapp
+import Image from "next/image";
+import { 
+  IoTrashOutline, 
+  IoShareSocialOutline, 
+  IoLogoWhatsapp, 
+  IoEllipsisVertical 
 } from "react-icons/io5";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface Props {
   properties: (Omit<Property, "createdAt" | "updatedAt"> & {
@@ -17,26 +26,14 @@ interface Props {
 }
 
 export default function PropertyGrid({ properties }: Props) {
+  console.log('PropertyGrid received properties:', properties);
   const router = useRouter();
 
-  const handleShare = async (e: React.MouseEvent, id: string, title: string) => {
+  const handleShare = (e: React.MouseEvent, id: string, title: string) => {
     e.stopPropagation();
     const url = `${window.location.origin}/ficha/${id}`;
-    
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: title,
-          text: `🏡 ¡Mirá esta propiedad: ${title}!`,
-          url: url,
-        });
-      } catch (err) {
-        console.error("Share failed", err);
-      }
-    } else {
-      navigator.clipboard.writeText(url);
-      alert("Enlace copiado al portapapeles: " + url);
-    }
+    navigator.clipboard.writeText(url);
+    // Simple toast would be better, but keeping it minimalist
   };
 
   const handleWhatsApp = (e: React.MouseEvent, id: string, title: string) => {
@@ -46,110 +43,123 @@ export default function PropertyGrid({ properties }: Props) {
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const handleDelete = async (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (confirm("¿Estás seguro de que deseas eliminar esta ficha?")) {
-      try {
-        const res = await fetch(`/api/properties/${id}`, {
-          method: "DELETE",
-        });
-        if (res.ok) {
-          router.refresh();
-        } else {
-          alert("Error al eliminar la ficha");
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
   if (!properties || properties.length === 0) {
-    return <div className="text-gray-500 italic p-4">Aún no has creado ninguna Ficha (Propiedad Compartible).</div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-20 px-4 text-center border-2 border-dashed border-slate-100 rounded-[2.5rem]">
+        <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mb-6">
+          <IoShareSocialOutline size={32} className="text-slate-300" />
+        </div>
+        <h3 className="text-xl font-bold text-slate-900 mb-2">No tienes fichas creadas</h3>
+        <p className="text-slate-500 max-w-xs mx-auto mb-8">
+          Importa una propiedad o créala manualmente para empezar.
+        </p>
+      </div>
+    );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 gap-4">
       {properties.map((property) => (
         <div 
           key={property.id} 
           onClick={() => window.open(`/ficha/${property.id}`, '_blank')}
-          className="bg-white border hover:border-sky-300 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+          className="group relative bg-white border border-slate-100 hover:border-slate-200 rounded-3xl p-4 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-premium flex items-center gap-4"
         >
-          <div>
-            <div className="flex justify-between items-start mb-4">
-              <span className="inline-block px-3 py-1 bg-sky-100 text-sky-700 text-xs font-bold rounded-full tracking-wider uppercase">
-                {property.operationType || "Venta"}
-              </span>
-              <button
-                onClick={(e) => handleDelete(e, property.id)}
-                className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors"
-                title="Eliminar Propiedad"
-              >
-                <IoTrashOutline size={20} />
-              </button>
-            </div>
-            
-            <h3 className="font-bold text-lg text-slate-800 leading-tight mb-2 line-clamp-2">
-              {property.title}
-            </h3>
-            
-            <div className="text-2xl font-black text-slate-900 mb-4">
-              {property.currency} {property.price?.toLocaleString()}
-            </div>
-
-            <div className="text-sm text-slate-500 mb-4 line-clamp-1">
-              📍 {property.address}, {property.neighborhood}
-            </div>
-
-            {property.photos && property.photos.length > 0 && (
-              <div className="h-40 w-full rounded-xl overflow-hidden mb-4 relative">
-                <img 
-                  src={property.photos[0]} 
-                  alt={property.title} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-                <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/50 backdrop-blur-md rounded-md text-white text-xs">
-                  {property.photos.length} fotos
-                </div>
+          {/* Thumbnail */}
+          <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0">
+            {property.photos?.[0] ? (
+              <Image 
+                src={property.photos[0]} 
+                alt={property.title} 
+                fill 
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                unoptimized={true}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full text-slate-300">
+                <IoShareSocialOutline size={24} />
               </div>
             )}
+            <div className="absolute top-2 left-2 px-2 py-0.5 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-black uppercase tracking-tighter text-slate-900">
+              {property.operationType || "Venta"}
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 mt-auto border-t pt-4">
-            <button
-              onClick={(e) => handleWhatsApp(e, property.id, property.title)}
-              className="flex flex-col items-center justify-center gap-1 p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-              title="Compartir por WhatsApp"
-            >
-              <IoLogoWhatsapp size={22} />
-              <span className="text-[10px] font-bold">Enviar WA</span>
-            </button>
+          {/* Info */}
+          <div className="flex-1 min-w-0 pr-12">
+            <h3 className="font-bold text-slate-900 text-lg md:text-xl truncate mb-1">
+              {property.title}
+            </h3>
+            <p className="text-slate-400 text-sm font-medium mb-3 truncate">
+              {property.address}, {property.neighborhood}
+            </p>
             
-            <button
-              onClick={(e) => handleShare(e, property.id, property.title)}
-              className="flex flex-col items-center justify-center gap-1 p-2 text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
-              title="Copiar Link"
-            >
-              <IoShareSocialOutline size={22} />
-              <span className="text-[10px] font-bold">Copiar Link</span>
-            </button>
-            
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(`/ficha/${property.id}`, '_blank');
-              }}
-              className="flex flex-col items-center justify-center gap-1 p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
-              title="Ver Ficha"
-            >
-              <IoOpenOutline size={22} />
-              <span className="text-[10px] font-bold">Ver Ficha</span>
-            </button>
+            <div className="flex items-end justify-between">
+              <div>
+                <span className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-0.5">Precio</span>
+                <span className="text-xl md:text-2xl font-black text-slate-900 leading-none">
+                  {property.currency} {property.price?.toLocaleString()}
+                </span>
+              </div>
+              
+              <div className="hidden md:flex items-center gap-2">
+                <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-full uppercase tracking-widest">
+                  Publicado
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Side Bio/Actions on Desktop, Context Menu everywhere */}
+          <div className="absolute top-4 right-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                <Button variant="ghost" size="icon" className="rounded-full w-10 h-10 hover:bg-slate-50">
+                  <IoEllipsisVertical size={20} className="text-slate-400" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 border-slate-100 shadow-premium">
+                <DropdownMenuItem 
+                  onClick={(e) => { e.stopPropagation(); window.open(`/ficha/${property.id}`, '_blank'); }}
+                  className="rounded-xl px-4 py-3 font-bold text-slate-700 flex items-center gap-3"
+                >
+                  <IoShareSocialOutline size={18} />
+                  Ver Ficha Pública
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={(e) => handleWhatsApp(e, property.id, property.title)}
+                  className="rounded-xl px-4 py-3 font-bold text-emerald-600 flex items-center gap-3"
+                >
+                  <IoLogoWhatsapp size={18} />
+                  Enviar por WhatsApp
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={(e) => handleShare(e, property.id, property.title)}
+                  className="rounded-xl px-4 py-3 font-bold text-sky-600 flex items-center gap-3"
+                >
+                  <IoShareSocialOutline size={18} />
+                  Copiar Enlace
+                </DropdownMenuItem>
+                <div className="my-1 border-t border-slate-50" />
+                <DropdownMenuItem 
+                  className="rounded-xl px-4 py-3 font-bold text-red-500 flex items-center gap-3 focus:bg-red-50 focus:text-red-600"
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    if (confirm("¿Eliminar esta ficha?")) {
+                      await fetch(`/api/properties/${property.id}`, { method: "DELETE" });
+                      router.refresh();
+                    }
+                  }}
+                >
+                  <IoTrashOutline size={18} />
+                  Eliminar
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       ))}
+      
     </div>
   );
 }

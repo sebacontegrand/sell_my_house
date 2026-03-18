@@ -53,11 +53,19 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      boxShadow: {
+        'premium': '0 0 0 1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)',
+        'glass': 'inset 0 0 0 1px rgba(255,255,255,0.1), 0 8px 32px 0 rgba(0,0,0,0.05)',
+      },
       borderRadius: {
+        xl: "1rem",
+        '2xl': "1.5rem",
+        '3xl': "2rem",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
