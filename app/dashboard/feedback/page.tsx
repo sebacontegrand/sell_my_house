@@ -10,23 +10,32 @@ import { auth } from "@/auth";
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 const FeedBackPage = async ({ searchParams }: PageProps) => {
   const session = await auth();
   if (!session?.user?.email) redirect("/api/auth/signin");
 
+  // Await searchParams (required in Next.js 14.2+ production builds)
+  const resolvedParams = await searchParams;
+
   // Ensure we have the DB user ID for filtering
-  const dbUser = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    select: { id: true }
-  });
+  let dbUser;
+  try {
+    dbUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true }
+    });
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    dbUser = null;
+  }
 
   if (!dbUser) redirect("/api/auth/signin");
 
-  const prelistingId = typeof searchParams.prelistingId === 'string' ? searchParams.prelistingId : undefined;
-  const propertyId = typeof searchParams.propertyId === 'string' ? searchParams.propertyId : undefined;
+  const prelistingId = typeof resolvedParams.prelistingId === 'string' ? resolvedParams.prelistingId : undefined;
+  const propertyId = typeof resolvedParams.propertyId === 'string' ? resolvedParams.propertyId : undefined;
   
   const whereClause: any = {
     OR: [
@@ -38,14 +47,20 @@ const FeedBackPage = async ({ searchParams }: PageProps) => {
   if (prelistingId) whereClause.prelistingId = prelistingId;
   if (propertyId) whereClause.propertyId = propertyId;
 
-  const feedbacks = await prisma.feedback.findMany({
-    where: whereClause,
-    orderBy: { createdAt: 'desc' },
-    include: {
-      prelisting: true,
-      property: true
-    }
-  });
+  let feedbacks: any[] = [];
+  try {
+    feedbacks = await prisma.feedback.findMany({
+      where: whereClause,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        prelisting: true,
+        property: true
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching feedbacks:", error);
+    feedbacks = [];
+  }
 
   const totalFeedbacks = feedbacks.length;
   const feedbacksWithRating = feedbacks.filter((f: any) => f.rating);
